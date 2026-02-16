@@ -14,7 +14,7 @@ This blog is focused on learning and sharing development knowledge:
 
 Visit the blog: [Hyun Dev Blog](https://hyun7en.github.io)
 
-For English version → [README_EN.md](README_EN.md)  
+For English version → [README_EN.md](README.md)  
 한국어 버전 → [README_KO.md](README_KO.md)
 
 ---
