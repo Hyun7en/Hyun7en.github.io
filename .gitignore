@@ -1,0 +1,71 @@
+# ---------------------------
+# Jekyll / Ruby / Windows / macOS / IDE
+# ---------------------------
+
+### Jekyll ###
+_site/
+.sass-cache/
+.jekyll-cache/
+.jekyll-metadata
+.bundle/
+vendor/
+
+### Ruby ###
+*.gem
+*.rbc
+/.config
+/coverage/
+/InstalledFiles
+/pkg/
+/spec/reports/
+/spec/examples.txt
+/test/tmp/
+/test/version_tmp/
+/tmp/
+.byebug_history
+.dat*
+.repl_history
+build/
+*.bridgesupport
+build-iPhoneOS/
+build-iPhoneSimulator/
+.yardoc/
+_yardoc/
+doc/
+rdoc/
+/vendor/bundle
+/lib/bundler/man/
+.rvmrc
+
+# Environment variable files
+.env
+
+# Gem settings (optional)
+# Gemfile.lock
+# .ruby-version
+# .ruby-gemset
+
+### Windows ###
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+### macOS ###
+.DS_Store
+
+### IDE ###
+# VS Code
+.vscode/
+# IntelliJ / IDEA
+.idea/
+*.iml
