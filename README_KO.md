@@ -13,7 +13,7 @@
 
 블로그 방문: [Hyun Dev Blog](https://hyun7en.github.io)
 
-For English version → [README_EN.md](README_EN.md)  
+For English version → [README_EN.md](README.md)  
 한국어 버전 → [README_KO.md](README_KO.md)
 
 ---
