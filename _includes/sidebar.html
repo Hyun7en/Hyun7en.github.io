@@ -1,10 +1,59 @@
 <aside class="sidebar">
-  <h3>Recent Posts</h3>
-  <ul>
-    {% for post in site.posts limit:5 %}
-      <li>
-        <a href="{{ post.url }}">{{ post.title }}</a>
-      </li>
-    {% endfor %}
-  </ul>
+
+  <!-- Author Card -->
+  <div class="sidebar-widget author-card">
+    <div class="author-name">{{ site.author.name }}</div>
+    <div class="author-bio">{{ site.author.bio }}</div>
+    <div class="author-links">
+      {% if site.author.github %}
+        <a href="https://github.com/{{ site.author.github }}" target="_blank" rel="noopener">GitHub</a>
+      {% endif %}
+      <a href="/about/">About</a>
+    </div>
+  </div>
+
+  <!-- Categories -->
+  {% if site.categories.size > 0 %}
+  <div class="sidebar-widget">
+    <h3>Categories</h3>
+    <ul class="category-list">
+      {% assign sorted_categories = site.categories | sort %}
+      {% for category in sorted_categories %}
+        <li>
+          <a href="/categories/#{{ category[0] | slugify }}">
+            {{ category[0] }}
+            <span class="count">{{ category[1].size }}</span>
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+
+  <!-- Tags -->
+  {% if site.tags.size > 0 %}
+  <div class="sidebar-widget">
+    <h3>Tags</h3>
+    <div class="tag-cloud">
+      {% assign sorted_tags = site.tags | sort %}
+      {% for tag in sorted_tags %}
+        <a href="/tags/#{{ tag[0] | slugify }}" class="tag"># {{ tag[0] }}</a>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Recent Posts -->
+  <div class="sidebar-widget">
+    <h3>Recent Posts</h3>
+    <ul class="recent-posts">
+      {% for post in site.posts limit:5 %}
+        <li>
+          <a href="{{ post.url }}">{{ post.title }}</a>
+          <span class="date">{{ post.date | date: "%Y.%m.%d" }}</span>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+
 </aside>
