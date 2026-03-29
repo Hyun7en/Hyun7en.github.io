@@ -1,8 +1,106 @@
 ---
 layout: post
-title: "First Post"
+title: "Spring Boot + JPA 시작하기"
 date: 2026-02-16
-categories: log
+categories: Spring
+tags: [Java, Spring Boot, JPA, ORM]
+description: Spring Boot와 JPA를 이용해 간단한 CRUD API를 만드는 과정을 정리합니다.
 ---
 
-블로그 시작.
+Spring Boot와 JPA를 활용하면 데이터베이스 연동을 매우 간결하게 처리할 수 있습니다.
+이번 글에서는 기본 설정부터 간단한 CRUD API 구현까지 정리해보겠습니다.
+
+## 환경 설정
+
+`build.gradle`에 의존성을 추가합니다.
+
+```groovy
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    runtimeOnly 'com.h2database:h2'
+}
+```
+
+`application.yml` 설정:
+
+```yaml
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+```
+
+## Entity 작성
+
+```java
+@Entity
+@Getter
+@NoArgsConstructor
+public class Post {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String title;
+    private String content;
+
+    public Post(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
+}
+```
+
+## Repository
+
+```java
+public interface PostRepository extends JpaRepository<Post, Long> {
+}
+```
+
+`JpaRepository`를 상속하는 것만으로 `save()`, `findById()`, `findAll()`, `deleteById()` 등의 기본 CRUD 메서드를 사용할 수 있습니다.
+
+## Service
+
+```java
+@Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
+public class PostService {
+
+    private final PostRepository postRepository;
+
+    public List<Post> findAll() {
+        return postRepository.findAll();
+    }
+
+    @Transactional
+    public Post save(String title, String content) {
+        return postRepository.save(new Post(title, content));
+    }
+}
+```
+
+## 핵심 포인트
+
+> `@Transactional(readOnly = true)`를 클래스 레벨에 붙이고,
+> 쓰기 작업에만 `@Transactional`을 추가하는 패턴이 일반적입니다.
+
+| 어노테이션 | 역할 |
+|---|---|
+| `@Entity` | JPA 관리 객체로 등록 |
+| `@Id` | Primary Key 지정 |
+| `@GeneratedValue` | ID 자동 생성 전략 |
+| `@Transactional` | 트랜잭션 범위 설정 |
+
+## 정리
+
+- JPA는 SQL 대신 객체 중심으로 DB를 다룰 수 있게 해준다
+- `JpaRepository` 상속만으로 기본 CRUD를 사용할 수 있다
+- `@Transactional` 관리는 서비스 레이어에서 담당하는 것이 원칙이다
