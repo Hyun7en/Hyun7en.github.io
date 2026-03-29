@@ -40,6 +40,17 @@ layout: default
 </article>
 
 <!-- 이전/다음 포스트 -->
+<!-- 댓글 -->
+<div class="comments" style="margin-top: 36px;">
+  <script src="https://utteranc.es/client.js"
+    repo="Hyun7en/Hyun7en.github.io"
+    issue-term="pathname"
+    theme="github-light"
+    crossorigin="anonymous"
+    async>
+  </script>
+</div>
+
 {% if page.previous or page.next %}
   <nav class="post-nav">
     {% if page.next %}
