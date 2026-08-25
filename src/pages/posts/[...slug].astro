@@ -1,0 +1,84 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { formatDateLong } from '../../lib/format';
+
+export async function getStaticPaths() {
+  const posts = (await getCollection('posts', ({ data }) => !data.draft))
+    .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+  return posts.map((post, index) => ({
+    params: { slug: post.id },
+    props: {
+      post,
+      prevPost: posts[index + 1] ?? null, // older
+      nextPost: posts[index - 1] ?? null, // newer
+    },
+  }));
+}
+
+const { post, prevPost, nextPost } = Astro.props;
+const { Content } = await render(post);
+
+const words = post.body?.split(/\s+/).length ?? 0;
+const readTime = Math.floor(words / 200) + 1;
+---
+
+<BaseLayout title={post.data.title} description={post.data.description} showSidebar>
+  <article class="post-article">
+    <header class="post-header">
+      {post.data.category && (
+        <a href="/posts/" class="category-label">{post.data.category}</a>
+      )}
+
+      <h1 class="post-title">{post.data.title}</h1>
+
+      <div class="post-meta">
+        <span class="post-meta-item">📅 {formatDateLong(post.data.date)}</span>
+        <span class="post-meta-item">⏱ 약 {readTime}분</span>
+      </div>
+
+      {post.data.tags.length > 0 && (
+        <div class="post-tags">
+          {post.data.tags.map((tag) => (
+            <span class="tag"># {tag}</span>
+          ))}
+        </div>
+      )}
+    </header>
+
+    <div class="post-content">
+      <Content />
+    </div>
+  </article>
+
+  <div class="comments" style="margin-top: 36px;">
+    <script
+      is:inline
+      src="https://utteranc.es/client.js"
+      repo="Hyun7en/Hyun7en.github.io"
+      issue-term="pathname"
+      theme="github-light"
+      crossorigin="anonymous"
+      async
+    ></script>
+  </div>
+
+  {(prevPost || nextPost) && (
+    <nav class="post-nav">
+      {prevPost ? (
+        <a href={`/posts/${prevPost.id}/`} class="post-nav-item prev">
+          <span class="post-nav-label">← 이전 글</span>
+          <span class="post-nav-title">{prevPost.data.title}</span>
+        </a>
+      ) : <div />}
+
+      {nextPost ? (
+        <a href={`/posts/${nextPost.id}/`} class="post-nav-item next">
+          <span class="post-nav-label">다음 글 →</span>
+          <span class="post-nav-title">{nextPost.data.title}</span>
+        </a>
+      ) : <div />}
+    </nav>
+  )}
+</BaseLayout>

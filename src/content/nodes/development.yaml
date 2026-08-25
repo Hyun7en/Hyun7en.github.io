@@ -1,0 +1,11 @@
+name: "Software Development"
+type: architecture
+description: >
+  백엔드, 프론트엔드, 데이터베이스, AI 등 소프트웨어 개발 전반을 아우르는
+  총괄 아키텍처. 여기서부터 각 기술 영역으로 탐색을 시작한다.
+parent: []
+related: []
+x: 700
+y: 0
+articles: []
+til: []

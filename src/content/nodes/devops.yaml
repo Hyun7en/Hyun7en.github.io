@@ -1,0 +1,9 @@
+name: "DevOps"
+type: technology
+description: "Docker, CI/CD 등 배포/운영 자동화."
+parent: ["development"]
+related: []
+x: 1300
+y: 220
+articles: []
+til: []

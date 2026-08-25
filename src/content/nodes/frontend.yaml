@@ -1,0 +1,9 @@
+name: "Frontend"
+type: technology
+description: "웹/앱 클라이언트 UI 개발."
+parent: ["development"]
+related: []
+x: 400
+y: 220
+articles: []
+til: []

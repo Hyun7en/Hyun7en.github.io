@@ -1,0 +1,12 @@
+name: "JPA"
+type: concept
+description: "자바 객체와 관계형 DB 테이블을 매핑하는 ORM 표준 스펙."
+parent: ["backend"]
+related: []
+x: 100
+y: 440
+articles:
+  - path: "backend/spring-boot-jpa"
+til:
+  - repository: "MY_PJT"
+    path: "TIL/Spring/JPA"

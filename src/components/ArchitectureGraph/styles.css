@@ -1,0 +1,18 @@
+.architecture-graph {
+  position: relative;
+  width: 100%;
+  height: calc(100dvh - 60px);
+}
+
+/* Float the detail panel over the graph canvas (default NodeDetailPanel
+   styling is a plain static card for the /architecture/[id] page). */
+.architecture-graph .node-panel {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 320px;
+  max-width: calc(100% - 40px);
+  max-height: calc(100% - 40px);
+  overflow-y: auto;
+  z-index: 10;
+}

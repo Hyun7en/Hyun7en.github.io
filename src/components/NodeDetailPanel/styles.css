@@ -1,0 +1,112 @@
+.node-panel {
+  background: var(--color-surface, #fff);
+  border: 1px solid var(--color-border, #e2e8f0);
+  border-radius: var(--radius, 8px);
+  box-shadow: var(--shadow, 0 2px 12px rgba(0, 0, 0, 0.06));
+  padding: 24px;
+  font-family: var(--font-body, sans-serif);
+  position: relative;
+}
+
+.node-panel-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: var(--color-text-sub, #64748b);
+}
+
+.node-panel-type {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--color-text-sub, #64748b);
+  margin-bottom: 6px;
+}
+
+.node-panel-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-text, #1e293b);
+  margin-bottom: 10px;
+}
+
+.node-panel-desc {
+  font-size: 13px;
+  color: var(--color-text-sub, #64748b);
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.node-panel-section {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--color-border, #e2e8f0);
+}
+
+.node-panel-section h3 {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--color-text-sub, #64748b);
+  margin-bottom: 8px;
+}
+
+.node-panel-section ul {
+  list-style: none;
+}
+
+.node-panel-section li {
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.node-panel-link {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-size: 14px;
+  color: var(--color-primary, #2563eb);
+  text-align: left;
+}
+.node-panel-link:hover {
+  text-decoration: underline;
+}
+
+.node-panel-context {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-primary, #2563eb);
+  background: var(--color-tag-bg, #eff6ff);
+  padding: 2px 8px;
+  border-radius: 20px;
+  margin-bottom: 6px;
+}
+
+.node-panel-context-group {
+  margin-bottom: 10px;
+}
+
+.node-panel-badge {
+  display: inline-block;
+  margin-left: 6px;
+  font-size: 10px;
+  color: #b45309;
+  background: #fef3c7;
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.node-panel-empty {
+  font-size: 13px;
+  color: var(--color-text-sub, #64748b);
+  margin-top: 12px;
+}

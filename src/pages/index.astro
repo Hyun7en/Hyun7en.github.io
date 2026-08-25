@@ -1,0 +1,11 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ArchitectureGraph from '../components/ArchitectureGraph';
+import { getGraph } from '../lib/graph';
+
+const graph = await getGraph();
+---
+
+<BaseLayout fullBleed>
+  <ArchitectureGraph client:load graph={graph} />
+</BaseLayout>

@@ -13,20 +13,35 @@
 
 블로그 방문: [Hyun Dev Blog](https://hyun7en.github.io)
 
-For English version → [README_EN.md](README.md)  
-한국어 버전 → [README_KO.md](README_KO.md)
+For English version → [English](README.md)  
+한국어 버전 → [한국어](README_KO.md)
 
 ---
 
 ## 기술 스택
 
-- **프로그래밍 & 백엔드:** Java, Spring Boot, JPA, Kafka  
-- **프론트엔드 & 웹:** HTML, CSS, JavaScript, Jekyll  
-- **호스팅:** GitHub Pages  
+**사이트 구현 스택 (현재):**
+- Jekyll, HTML, CSS, JavaScript
+- GitHub Pages
+
+**다루는 학습 주제:**
+- Java, Spring Boot, JPA, Kafka 등
+
+---
+
+## 로드맵
+
+현재는 Jekyll 기반이지만, **Astro + MDX + React**로 이전하여 단순 카테고리 목록이 아닌 아키텍처/지식 그래프 기반의 인터랙티브한 구조로 재설계할 계획입니다.
+
+핵심 이유는 앞으로 작성할 글에 벤치마크 차트, 코드 diff 같은 조작 가능한 위젯을 본문에 자연스럽게 삽입해야 하는데, Jekyll(Liquid)로는 이를 지원하기 어렵고 MDX는 React 컴포넌트를 포스트 본문에 그대로 끼워 넣을 수 있기 때문입니다.
+
+현재 상태: **계획만 수립된 상태이며 구현은 아직 시작 전**입니다 — 자세한 설계 문서는 [docs/architecture-blog-plan.md](docs/architecture-blog-plan.md)를 참고하세요.
 
 ---
 
 ## 사용 방법
+
+(현재 Jekyll 기준)
 
 - 모든 콘텐츠는 Markdown으로 작성되어 쉽게 업데이트 가능  
 - 레이아웃과 include로 페이지 구조, 헤더, 푸터, 스타일을 관리  

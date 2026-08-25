@@ -1,0 +1,9 @@
+name: "AI"
+type: technology
+description: "머신러닝/딥러닝, LLM 활용 등 AI 관련 기술."
+parent: ["development"]
+related: []
+x: 1000
+y: 220
+articles: []
+til: []

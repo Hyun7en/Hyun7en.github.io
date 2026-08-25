@@ -1,0 +1,51 @@
+---
+import { site, nav } from '../site.config';
+
+const logoFirst = site.title.split(' ')[0];
+const logoRest = site.title.split(' ').slice(1).join(' ');
+---
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="/" class="site-logo">
+      {logoFirst}<span>{logoRest ? ` ${logoRest}` : ''}</span>
+    </a>
+
+    <button class="nav-toggle" id="nav-toggle" aria-label="메뉴 열기" aria-expanded="false">
+      ☰
+    </button>
+
+    <nav class="site-nav" id="site-nav">
+      {nav.map((item) => (
+        <a href={item.url}>{item.title}</a>
+      ))}
+    </nav>
+  </div>
+</header>
+
+<script>
+  const navToggle = document.getElementById('nav-toggle');
+  const siteNav = document.getElementById('site-nav');
+
+  if (navToggle && siteNav) {
+    navToggle.addEventListener('click', () => {
+      siteNav.classList.toggle('open');
+      navToggle.setAttribute('aria-expanded', String(siteNav.classList.contains('open')));
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!navToggle.contains(e.target as Node) && !siteNav.contains(e.target as Node)) {
+        siteNav.classList.remove('open');
+      }
+    });
+  }
+
+  document.querySelectorAll('.site-nav a').forEach((link) => {
+    const href = link.getAttribute('href');
+    if (!href) return;
+    const path = window.location.pathname;
+    if (path === href || (href !== '/' && path.startsWith(href))) {
+      link.classList.add('active');
+    }
+  });
+</script>

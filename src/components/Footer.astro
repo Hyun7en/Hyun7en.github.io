@@ -1,0 +1,18 @@
+---
+import { site, author } from '../site.config';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <span>© {year} <a href="/">{site.title}</a></span>
+    <span>
+      Built with <a href="https://astro.build" target="_blank" rel="noopener">Astro</a> ·
+      Hosted on <a href="https://pages.github.com" target="_blank" rel="noopener">GitHub Pages</a>
+      {author.github && (
+        <> · <a href={`https://github.com/${author.github}`} target="_blank" rel="noopener">GitHub</a></>
+      )}
+    </span>
+  </div>
+</footer>

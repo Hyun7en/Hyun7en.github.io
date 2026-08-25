@@ -1,0 +1,9 @@
+name: "Backend"
+type: technology
+description: "서버, API, 데이터 처리 등 백엔드 개발 전반."
+parent: ["development"]
+related: []
+x: 100
+y: 220
+articles: []
+til: []

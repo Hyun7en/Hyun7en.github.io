@@ -1,0 +1,37 @@
+---
+import { getCollection } from 'astro:content';
+import { author } from '../site.config';
+import { formatDate } from '../lib/format';
+
+const posts = await getCollection('posts', ({ data }) => !data.draft);
+const recentPosts = posts
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 5);
+---
+
+<aside class="sidebar">
+
+  <div class="sidebar-widget author-card">
+    <div class="author-name">{author.name}</div>
+    <div class="author-bio">{author.bio}</div>
+    <div class="author-links">
+      {author.github && (
+        <a href={`https://github.com/${author.github}`} target="_blank" rel="noopener">GitHub</a>
+      )}
+      <a href="/about/">About</a>
+    </div>
+  </div>
+
+  <div class="sidebar-widget">
+    <h3>Recent Posts</h3>
+    <ul class="recent-posts">
+      {recentPosts.map((post) => (
+        <li>
+          <a href={`/posts/${post.id}/`}>{post.data.title}</a>
+          <span class="date">{formatDate(post.data.date)}</span>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+</aside>
