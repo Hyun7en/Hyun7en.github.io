@@ -9,7 +9,7 @@
 이 블로그는 개발 학습과 지식 공유를 목적으로 합니다:  
 - 개인 프로젝트와 코딩 실험 기록  
 - 학습 진행 상황과 기술 팁 공유  
-- Jekyll, HTML/CSS/JS 등 웹 개발 도구 실습
+- 기술, 개념, 블로그 글, 실제 구현 코드를 연결하는 인터랙티브 Architecture 그래프
 
 블로그 방문: [Hyun Dev Blog](https://hyun7en.github.io)
 
@@ -20,32 +20,28 @@ For English version → [English](README.md)
 
 ## 기술 스택
 
-**사이트 구현 스택 (현재):**
-- Jekyll, HTML, CSS, JavaScript
-- GitHub Pages
+**사이트 구현 스택:**
+- Astro (Content Collections + MDX)
+- React 아일랜드 — Architecture 그래프는 `@xyflow/react`
+- GitHub Pages, GitHub Actions로 빌드/배포
 
 **다루는 학습 주제:**
 - Java, Spring Boot, JPA, Kafka 등
 
 ---
 
-## 로드맵
+## Architecture
 
-현재는 Jekyll 기반이지만, **Astro + MDX + React**로 이전하여 단순 카테고리 목록이 아닌 아키텍처/지식 그래프 기반의 인터랙티브한 구조로 재설계할 계획입니다.
-
-핵심 이유는 앞으로 작성할 글에 벤치마크 차트, 코드 diff 같은 조작 가능한 위젯을 본문에 자연스럽게 삽입해야 하는데, Jekyll(Liquid)로는 이를 지원하기 어렵고 MDX는 React 컴포넌트를 포스트 본문에 그대로 끼워 넣을 수 있기 때문입니다.
-
-현재 상태: **계획만 수립된 상태이며 구현은 아직 시작 전**입니다 — 자세한 설계 문서는 [docs/architecture-blog-plan.md](docs/architecture-blog-plan.md)를 참고하세요.
+단순 카테고리 목록 대신, 홈 화면은 제가 공부하는 기술과 그걸 설명하는 블로그 글, 실제 구현 코드가 담긴 [TIL 저장소](https://github.com/Hyun7en/MY_PJT)를 연결하는 인터랙티브 그래프(Architecture → Technology → Concept)로 되어 있습니다. 설계 배경과 데이터 모델 전체는 [docs/architecture-blog-plan.md](docs/architecture-blog-plan.md)를 참고하세요.
 
 ---
 
 ## 사용 방법
 
-(현재 Jekyll 기준)
-
-- 모든 콘텐츠는 Markdown으로 작성되어 쉽게 업데이트 가능  
-- 레이아웃과 include로 페이지 구조, 헤더, 푸터, 스타일을 관리  
-- 포스트는 `_posts/` 폴더에 저장
+- `npm install && npm run dev` — 로컬 개발 서버
+- 블로그 글은 `src/content/posts/`(Markdown/MDX)에 위치
+- Architecture/Technology/Concept 노드는 `src/content/nodes/`(YAML)에 위치
+- `npm run build` — `dist/`로 정적 빌드, `main` 브랜치 푸시 시 GitHub Actions가 자동 배포
 
 ---
 

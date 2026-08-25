@@ -10,7 +10,7 @@ Here, I document my journey learning various technologies, programming concepts,
 This blog is focused on learning and sharing development knowledge:  
 - Notes from personal projects and coding experiments  
 - Recording learning progress and technical tips  
-- Trying out Jekyll, HTML/CSS/JS, and other web development tools
+- An interactive Architecture graph connecting technologies, concepts, blog posts, and the actual code behind them
 
 Visit the blog: [Hyun Dev Blog](https://hyun7en.github.io)
 
@@ -21,32 +21,28 @@ For English version → [English](README.md)
 
 ## Tech Stack
 
-**Site implementation (current):**
-- Jekyll, HTML, CSS, JavaScript
-- GitHub Pages
+**Site implementation:**
+- Astro (Content Collections + MDX)
+- React islands — `@xyflow/react` for the Architecture graph
+- GitHub Pages, built and deployed via GitHub Actions
 
 **Topics I study and write about:**
 - Java, Spring Boot, JPA, Kafka, and more
 
 ---
 
-## Roadmap
+## Architecture
 
-This blog is currently Jekyll-based, but is planned to migrate to **Astro + MDX + React**, redesigned around an interactive architecture/knowledge-graph experience instead of a plain category list.
-
-The main driver: upcoming posts need embeddable, interactive widgets (benchmark charts, code diffs) directly in the content — something Jekyll/Liquid isn't built for, while MDX lets React components sit naturally inside a post.
-
-Status: **planned, not yet implemented** — see the full design doc at [docs/architecture-blog-plan.md](docs/architecture-blog-plan.md).
+Instead of a plain category list, the home page shows an interactive graph (Architecture → Technology → Concept) that connects the technologies I study, the blog posts explaining them, and the real implementation code in my [TIL repository](https://github.com/Hyun7en/MY_PJT). Full design rationale and data model: [docs/architecture-blog-plan.md](docs/architecture-blog-plan.md).
 
 ---
 
 ## How to Use
 
-(Current Jekyll structure)
-
-- All content is written in Markdown for easy updates  
-- Layouts and includes handle page structure, header, footer, and styling  
-- Posts are stored in `_posts/` folder  
+- `npm install && npm run dev` — local dev server
+- Blog posts live in `src/content/posts/` (Markdown/MDX)
+- Architecture/Technology/Concept nodes live in `src/content/nodes/` (YAML)
+- `npm run build` — static build to `dist/`, auto-deployed via GitHub Actions on push to `main`
 
 ---
 
