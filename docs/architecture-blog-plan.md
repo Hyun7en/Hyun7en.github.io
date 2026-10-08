@@ -478,7 +478,7 @@ MVP 구현이 끝났다. 아래는 실제 구현 과정에서 이 문서의 설�
 
 **노드 상세 패널의 정적/동적 이원화**: `NodeDetailPanel` 컴포넌트를 그래프 오버레이(인터랙티브, `client:load`)와 `/architecture/[id]` 단독 페이지(정적) 양쪽에서 재사용한다. Astro의 `client:*` 하이드레이션은 prop을 JSON으로 직렬화하므로 함수(`onClose`, `onSelectRelated`)나 `Map`을 그대로 넘길 수 없다 — `nodesById`는 `Map` 대신 **직렬화 가능한 plain object**로, `onSelectRelated`가 없을 때는 버튼 대신 `/architecture/{id}/`로 가는 **일반 링크**로 렌더링하도록 컴포넌트를 분기시켰다.
 
-**TIL 경로 관례 (6절, 9절, 12절)**: 문서의 YAML 예시는 `repository: TIL`을 가정하지만, 실제 TIL 저장소는 별도 `TIL` 저장소가 아니라 기존 **`Hyun7en/MY_PJT` 저장소 안의 `TIL/` 서브폴더**다 (그 안에 강의 학습용 `practice01`과는 별개로 존재). 그래서 실제 데이터는 `repository: MY_PJT`, `path: TIL/Spring/JPA`처럼 **경로 앞에 `TIL/` 프리픽스가 붙는다.** 이 서브폴더는 아직 만들어지지 않았기 때문에, TIL 존재 검증(12절)은 지금은 대부분 `unverified`로 표시된다 — 이건 빌드를 막지 않는 정상 동작이다.
+**TIL 경로 관례 (6절, 9절, 12절)**: 문서의 YAML 예시는 `repository: TIL`을 가정하지만, 실제 TIL 저장소는 별도 `TIL` 저장소가 아니라 기존 **`Hyun7en/MY_PJT` 저장소 안의 `TIL/` 서브폴더**다 (그 안에 강의 학습용 `practice01`과는 별개로 존재). 그래서 실제 데이터는 `repository: MY_PJT`, `path: TIL/Spring/JPA`처럼 **경로 앞에 `TIL/` 프리픽스가 붙는다.** MY_PJT는 TIL과 별개로 여러 실습 프로젝트를 함께 담는 모노레포라 `TIL/` 서브폴더 구조를 유지한다. 존재 검증(12절)은 빌드 시 GitHub API로 하며, CI에서는 워크플로 `GITHUB_TOKEN`으로 인증해 rate limit을 피한다. 403/429 응답은 경로 없음이 아니라 `unknown`으로 처리한다.
 
 **Node 참조 검증 강화**: `parent`/`related`/`articles[].path`를 문서 예시처럼 plain string이 아니라 Astro의 **`reference()`**로 선언했다. 존재하지 않는 노드/포스트를 가리키면 빌드 자체가 실패한다 — 12절이 우려하는 "조용히 깨지는 링크"를 컴파일 타임에 잡기 위함이다.
 
@@ -490,4 +490,4 @@ MVP 구현이 끝났다. 아래는 실제 구현 과정에서 이 문서의 설�
 
 **댓글**: Utterances(`repo="Hyun7en/Hyun7en.github.io"`)는 그대로 유지했다 — 정적 `<script>` 태그라 SSG를 뭘 쓰든 마이그레이션 비용이 없다.
 
-**남은 것**: `CodeDiff` 컴포넌트(11절 저장소 구조에는 있지만 MVP 범위 밖), Knowledge Graph 뷰/검색/추천/TIL 자동 연동 등 21절의 Future Features는 전부 미착수. `MY_PJT/TIL/` 서브폴더 생성은 이 저장소 밖에서 사용자가 별도로 처리해야 하는 일로 남아있다.
+**남은 것**: `CodeDiff` 컴포넌트(11절 저장소 구조에는 있지만 MVP 범위 밖), Knowledge Graph 뷰/검색/추천/TIL 자동 연동 등 21절의 Future Features는 전부 미착수.

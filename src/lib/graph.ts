@@ -75,14 +75,19 @@ export async function getGraph(): Promise<Graph> {
     }
   }
 
+  const token = process.env.GITHUB_TOKEN;
+  const headers: Record<string, string> = token ? { Authorization: `Bearer ${token}` } : {};
+
   await Promise.allSettled(
     Array.from(nodeMap.values()).flatMap((node) =>
       node.til.map(async (til) => {
         try {
           const res = await fetch(
-            `https://api.github.com/repos/Hyun7en/${til.repository}/contents/${til.path}`
+            `https://api.github.com/repos/Hyun7en/${til.repository}/contents/${til.path}`,
+            { headers }
           );
-          til.exists = res.ok;
+          // 403/429 are rate limits, not a missing path
+          til.exists = res.status === 403 || res.status === 429 ? 'unknown' : res.ok;
         } catch {
           til.exists = 'unknown';
         }
