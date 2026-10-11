@@ -5,7 +5,8 @@ import TrackCard from '../components/TrackCard.astro';
 import { getTechIndex } from '../lib/tech';
 
 const index = await getTechIndex();
-const recentPosts = index.posts.slice(0, 6);
+const recentPosts = index.posts.filter((post) => post.kind === 'study').slice(0, 6);
+const recentNews = index.posts.filter((post) => post.kind === 'news').slice(0, 3);
 const allTechs = [...index.techs.values()];
 const coveredCount = allTechs.filter((t) => t.posts.length > 0).length;
 
@@ -50,6 +51,15 @@ const activeTracks = index.tracks.filter((track) => track.techs.some((t) => t.po
       <p class="muted">아직 공개된 글이 없습니다.</p>
     )}
   </section>
+
+  {recentNews.length > 0 && (
+    <section>
+      <h2 class="section-title">최근 소식 <a href="/news/">소식 전체 →</a></h2>
+      <div class="post-grid">
+        {recentNews.map((post) => <PostCard post={post} index={index} />)}
+      </div>
+    </section>
+  )}
 
   {activeTracks.length > 0 && (
     <section>
