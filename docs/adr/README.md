@@ -17,6 +17,7 @@
 | [0011](0011-comments-giscus.md) | 댓글을 utterances에서 giscus로 전환 | 채택 | 2026-10-11 |
 | [0012](0012-project-scoped-ai-coding-rules.md) | AI 코딩 규칙을 이 저장소에만 적용 | 채택 | 2026-10-11 |
 | [0013](0013-study-and-news-posts.md) | 학습 글과 소식 글을 구분하고, 루틴은 소식 글만 쓴다 | 채택 | 2026-10-11 |
+| [0014](0014-dark-mode-follows-os.md) | 다크 모드는 OS 설정을 따르고 토글은 두지 않는다 | 채택 | 2026-10-11 |
 
 ## 새 ADR 쓰는 법
 

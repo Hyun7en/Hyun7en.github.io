@@ -10,7 +10,7 @@ Here, I document my journey learning various technologies, programming concepts,
 This blog is focused on learning and sharing development knowledge:  
 - Notes from personal projects and coding experiments  
 - Recording learning progress and technical tips  
-- An interactive Architecture graph connecting technologies, concepts, blog posts, and the actual code behind them
+- A tech flow (roadmap) that follows prerequisites between technologies and links blog posts to the actual code behind them
 
 Visit the blog: [Hyun Dev Blog](https://hyun7en.github.io)
 

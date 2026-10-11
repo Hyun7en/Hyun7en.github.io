@@ -1,12 +1,9 @@
 ---
-import { getCollection } from 'astro:content';
 import { author } from '../site.config';
 import { formatDate } from '../lib/format';
+import { getTechIndex } from '../lib/tech';
 
-const posts = await getCollection('posts', ({ data }) => !data.draft);
-const recentPosts = posts
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, 5);
+const recentPosts = (await getTechIndex()).posts.slice(0, 5);
 ---
 
 <aside class="sidebar">
@@ -27,8 +24,8 @@ const recentPosts = posts
     <ul class="recent-posts">
       {recentPosts.map((post) => (
         <li>
-          <a href={`/posts/${post.id}/`}>{post.data.title}</a>
-          <span class="date">{formatDate(post.data.date)}</span>
+          <a href={`/posts/${post.id}/`}>{post.title}</a>
+          <span class="date">{formatDate(post.date)}</span>
         </li>
       ))}
     </ul>
