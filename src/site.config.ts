@@ -16,3 +16,15 @@ export const nav = [
   { title: 'Posts', url: '/posts/' },
   { title: 'About', url: '/about/' },
 ];
+
+/**
+ * giscus (GitHub Discussions) comments. Get the ids from https://giscus.app
+ * after enabling Discussions on the repo; until `categoryId` is set, posts
+ * keep using utterances so comments never disappear (ADR 0011).
+ */
+export const giscus = {
+  repo: 'Hyun7en/Hyun7en.github.io',
+  repoId: 'R_kgDORK34SQ',
+  category: 'Comments',
+  categoryId: '',
+};

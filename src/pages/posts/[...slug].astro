@@ -4,6 +4,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import DomainBadge from '../../components/DomainBadge.astro';
 import TechChip from '../../components/TechChip.astro';
 import TechTree from '../../components/TechTree.astro';
+import Comments from '../../components/Comments.astro';
 import { formatDate, formatDateLong } from '../../lib/format';
 import { getTechIndex, techTree, type PostSummary, type Tech } from '../../lib/tech';
 
@@ -14,9 +15,6 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
-
-// utterances reads custom attributes that the <script> element type doesn't declare.
-const utterances = { repo: 'Hyun7en/Hyun7en.github.io', 'issue-term': 'pathname', theme: 'github-light' };
 
 const words = post.body?.split(/\s+/).length ?? 0;
 const readTime = Math.floor(words / 200) + 1;
@@ -134,7 +132,5 @@ const nextTechs = [...new Set(techs.flatMap((t) => t.next))]
     </section>
   )}
 
-  <div class="comments" style="margin-top: 36px;">
-    <script is:inline src="https://utteranc.es/client.js" crossorigin="anonymous" async {...utterances}></script>
-  </div>
+  <Comments />
 </BaseLayout>

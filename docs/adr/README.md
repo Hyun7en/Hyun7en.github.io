@@ -14,7 +14,7 @@
 | [0008](0008-sitemap-and-rss.md) | sitemap은 직접 생성, RSS는 @astrojs/rss | 채택 | 2026-10-11 |
 | [0009](0009-type-check-in-ci.md) | PR마다 타입 검사와 빌드 실행 | 채택 | 2026-10-11 |
 | [0010](0010-curated-learning-tracks.md) | 자동 추천 경로 대신 직접 고른 학습 트랙 | 채택 | 2026-10-11 |
-| [0011](0011-comments-giscus.md) | 댓글을 utterances에서 giscus로 전환 | 제안 | 2026-10-11 |
+| [0011](0011-comments-giscus.md) | 댓글을 utterances에서 giscus로 전환 | 제안 (코드 준비됨) | 2026-10-11 |
 | [0012](0012-project-scoped-ai-coding-rules.md) | AI 코딩 규칙을 이 저장소에만 적용 | 채택 | 2026-10-11 |
 
 ## 새 ADR 쓰는 법
