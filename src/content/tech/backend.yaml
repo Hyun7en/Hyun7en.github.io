@@ -1,5 +1,5 @@
 name: Backend
-order: 3
+order: 4
 color: "#2563eb"
 description: 서버, API, 인증, 서비스 구조 등 백엔드 개발 전반.
 techs:
@@ -19,6 +19,11 @@ techs:
     name: WebSocket
     description: 서버와 클라이언트 간 양방향 실시간 통신.
     requires: [http]
+  caching:
+    name: 캐싱
+    description: HTTP 캐시, 애플리케이션 캐시, 캐시 무효화와 일관성 전략.
+    requires: [http]
+    related: [redis]
   auth:
     name: 인증·인가 (JWT/OAuth)
     description: 세션, JWT, OAuth 2.0 / OIDC 기반 인증과 권한 관리.
@@ -52,10 +57,6 @@ techs:
     name: QueryDSL
     description: 타입 안전한 동적 쿼리 작성 라이브러리.
     requires: [jpa]
-  junit:
-    name: JUnit
-    description: Java 단위 테스트 프레임워크.
-    requires: [java]
   nodejs:
     name: Node.js
     description: V8 기반 서버 사이드 JavaScript 런타임.
@@ -68,6 +69,10 @@ techs:
     name: NestJS
     description: TypeScript 기반의 구조화된 Node.js 서버 프레임워크.
     requires: [typescript, nodejs]
+  prisma:
+    name: Prisma
+    description: 스키마 기반 TypeScript ORM.
+    requires: [typescript, sql]
   django:
     name: Django
     description: 배터리 포함형 Python 웹 프레임워크.
@@ -80,8 +85,3 @@ techs:
     name: ASP.NET Core
     description: .NET 기반 크로스플랫폼 웹 프레임워크.
     requires: [csharp]
-  msa:
-    name: MSA
-    description: 서비스를 독립 배포 단위로 나누는 마이크로서비스 아키텍처.
-    requires: [rest-api, docker]
-    related: [kafka]

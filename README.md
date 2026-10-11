@@ -69,7 +69,7 @@ draft: false               # true keeps it off the site
 ```
 
 - Technologies: `src/content/tech/<domain>.yaml`, one file per domain, one entry per technology (`requires`, `related`, `til`)
-- Learning tracks: `src/content/tracks/<id>.yaml`; each step is a `tech` or a pick-one `pick`, with side topics in `with`
+- Learning tracks: `src/content/tracks/<id>.yaml`; each step is a `tech` or a pick-one `pick`, with side topics in `with`; prerequisites the track takes as known go in `assumes`. Every tech's `requires` must appear earlier in the track or in `assumes`, or the build fails
 - Widgets (MDX): `BenchmarkChart`, `CodeCompare`, `Quiz`, `Stepper`, `NPlusOneCalculator` in `src/components/widgets/`; see each file's `Props`
 - Unknown tech ids and circular `requires` fail the build.
 

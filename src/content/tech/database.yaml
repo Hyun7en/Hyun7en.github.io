@@ -1,11 +1,15 @@
 name: Database
-order: 4
+order: 5
 color: "#b45309"
 description: 관계형·비관계형 데이터베이스와 데이터 모델링.
 techs:
   sql:
     name: SQL
     description: 관계형 데이터베이스를 다루는 질의 언어.
+  data-modeling:
+    name: 데이터 모델링
+    description: ERD, 정규화와 반정규화, 키 설계.
+    requires: [sql]
   mysql:
     name: MySQL
     description: 가장 널리 쓰이는 오픈소스 관계형 DB.
@@ -30,3 +34,4 @@ techs:
   vector-db:
     name: 벡터 DB
     description: 임베딩 벡터의 유사도 검색에 특화된 데이터베이스.
+    requires: [embeddings]

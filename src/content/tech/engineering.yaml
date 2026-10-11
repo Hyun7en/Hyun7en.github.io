@@ -1,0 +1,36 @@
+name: 설계·테스트
+order: 3
+color: "#4d7c0f"
+description: 언어와 무관한 설계 원칙, 테스트, 아키텍처.
+techs:
+  oop:
+    name: 객체지향 (OOP)
+    description: 캡슐화·상속·다형성과 SOLID 원칙.
+  design-patterns:
+    name: 디자인 패턴
+    description: 전략·팩토리·옵저버 등 반복되는 설계 문제의 해법.
+    requires: [oop]
+  testing:
+    name: 테스트
+    description: 단위·통합·E2E 테스트, 테스트 더블, TDD.
+  junit:
+    name: JUnit
+    description: Java 단위 테스트 프레임워크.
+    requires: [java, testing]
+  jest:
+    name: Jest
+    description: JavaScript 테스트 프레임워크.
+    requires: [javascript, testing]
+  pytest:
+    name: pytest
+    description: Python 테스트 프레임워크.
+    requires: [python, testing]
+  system-design:
+    name: 시스템 설계
+    description: 확장성·가용성을 고려한 서비스 구조 설계. 부하 분산, 샤딩, 복제.
+    requires: [networking, caching, sql]
+  msa:
+    name: MSA
+    description: 서비스를 독립 배포 단위로 나누는 마이크로서비스 아키텍처.
+    requires: [rest-api, docker]
+    related: [kafka]

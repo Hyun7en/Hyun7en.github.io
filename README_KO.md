@@ -68,7 +68,7 @@ draft: false               # true면 사이트에 안 나옴
 ```
 
 - 기술: `src/content/tech/<분야>.yaml`. 분야당 파일 하나, 기술당 항목 하나(`requires`, `related`, `til`)
-- 학습 트랙: `src/content/tracks/<id>.yaml`. 단계마다 `tech`(하나) 또는 `pick`(택1), 곁가지는 `with`
+- 학습 트랙: `src/content/tracks/<id>.yaml`. 단계마다 `tech`(하나) 또는 `pick`(택1), 곁가지는 `with`, 이미 안다고 가정하는 선수 지식은 `assumes`. 각 기술의 `requires`가 트랙 앞쪽이나 `assumes`에 없으면 빌드가 실패한다
 - 위젯(MDX): `src/components/widgets/`의 `BenchmarkChart`, `CodeCompare`, `Quiz`, `Stepper`, `NPlusOneCalculator`. 사용법은 각 파일의 `Props`
 - 없는 기술 ID를 쓰거나 `requires`가 순환하면 빌드가 실패합니다.
 

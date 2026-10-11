@@ -1,11 +1,16 @@
 name: 메시징
-order: 5
+order: 6
 color: "#9333ea"
 description: 서비스 간 비동기 통신과 이벤트 스트리밍.
 techs:
+  message-queue:
+    name: 메시지 큐
+    description: 비동기 메시징 개념. 생산자·소비자, 전달 보장, 멱등성.
   kafka:
     name: Kafka
     description: 분산 이벤트 스트리밍 플랫폼.
+    requires: [message-queue]
   rabbitmq:
     name: RabbitMQ
     description: AMQP 기반 메시지 브로커.
+    requires: [message-queue]

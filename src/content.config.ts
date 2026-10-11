@@ -54,6 +54,8 @@ const tracks = defineCollection({
     name: z.string(),
     order: z.number(),
     description: z.string().optional(),
+    /** Techs the track takes as already known; their prerequisites are not checked. */
+    assumes: z.array(z.string()).default([]),
     steps: z
       .array(
         z.union([
