@@ -32,10 +32,8 @@ For English version → [English](README.md)
 | Code highlighting | Shiki (dracula), at build time |
 | Fonts | Pretendard + JetBrains Mono, self-hosted |
 | Comments | giscus (GitHub Discussions) |
-| SEO | Generated sitemap, RSS (`@astrojs/rss`), canonical links, robots.txt |
-| Hosting / CI | GitHub Pages; GitHub Actions runs `astro check` + build on PRs and deploys `main` |
-
-Dependencies: `astro`, `@astrojs/mdx`, `@astrojs/rss`, `pretendard`, `@fontsource-variable/jetbrains-mono`; dev: `@astrojs/check`, `typescript`.
+| SEO | Generated sitemap, RSS (`@astrojs/rss`), canonical links, Open Graph tags, robots.txt |
+| Hosting / CI | GitHub Pages; GitHub Actions runs type check, build and an internal link check on PRs and before deploying `main` |
 
 **Topics I study and write about:**
 - Java, Spring Boot, JPA, Kafka, and more
@@ -57,14 +55,32 @@ Design notes: [docs/architecture-blog-plan.md](docs/architecture-blog-plan.md) (
 
 ## How to Use
 
-- `npm install && npm run dev` — local dev server
-- Blog posts live in `src/content/posts/` (Markdown/MDX); link a post to technologies with `tech: [spring-boot, jpa]` in its frontmatter
-- Post `kind`: `study` (default; hand-written learning posts, counted in roadmap/track progress) or `news` (hands-on looks at recent releases, listed under `/news/`, not counted)
-- Technologies live in `src/content/tech/<domain>.yaml` — one file per domain, one entry per technology (`requires`, `related`, `til`)
-- Learning tracks live in `src/content/tracks/<id>.yaml` — each step is a `tech` or a pick-one `pick`, with side topics in `with`
-- Unknown tech ids and circular `requires` fail the build
-- Post widgets (MDX) live in `src/components/widgets/`: `BenchmarkChart`, `CodeCompare`, `Quiz`, `Stepper`, `NPlusOneCalculator` — see each file's `Props`
-- `npm run build` — static build to `dist/`, auto-deployed via GitHub Actions on push to `main`
+Posts are Markdown or MDX in `src/content/posts/`, with the post's details in the frontmatter at the top:
+
+```md
+---
+title: "Spring Boot + JPA 시작하기"
+date: 2026-02-16
+description: One-line summary for cards, search results and link previews.
+tech: [spring-boot, jpa]   # tech ids from src/content/tech/*.yaml
+kind: study                # study (default, counted in progress) | news (listed under /news/, not counted)
+draft: false               # true keeps it off the site
+---
+```
+
+- Technologies: `src/content/tech/<domain>.yaml`, one file per domain, one entry per technology (`requires`, `related`, `til`)
+- Learning tracks: `src/content/tracks/<id>.yaml`; each step is a `tech` or a pick-one `pick`, with side topics in `with`
+- Widgets (MDX): `BenchmarkChart`, `CodeCompare`, `Quiz`, `Stepper`, `NPlusOneCalculator` in `src/components/widgets/`; see each file's `Props`
+- Unknown tech ids and circular `requires` fail the build.
+
+```bash
+npm install                           # Node.js 22.12+
+npm run dev                           # local dev server (http://localhost:4321)
+npm run check                         # type check
+npm run build && npm run check:links  # static build, then check for broken internal links
+```
+
+Merging into `main` deploys automatically via GitHub Actions.
 
 ---
 
