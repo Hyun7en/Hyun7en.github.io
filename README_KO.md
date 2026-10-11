@@ -50,7 +50,7 @@ For English version → [English](README.md)
 - **이어서 읽기** — 글 하단에 이 기술 다음으로 이어지는 기술의 글을 추천
 - **학습 트랙**(`/tracks/<id>/`) — 직접 고른 순서의 중심 줄기 + 곁가지, 택1 단계 표시 (roadmap.sh 방식)
 
-설계 메모: [docs/architecture-blog-plan.md](docs/architecture-blog-plan.md) 24절.
+설계 메모: [docs/architecture-blog-plan.md](docs/architecture-blog-plan.md) 24절. 기술을 왜 이렇게 골랐는지는 [docs/adr/](docs/adr/README.md)(ADR)에 정리했습니다.
 
 ---
 

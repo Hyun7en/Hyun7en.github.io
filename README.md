@@ -51,7 +51,7 @@ Every technology lists the ones you should know first (`requires`). From that al
 - **Read next** at the end of each post — posts on the technologies that build on this one
 - **Learning tracks** (`/tracks/<id>/`) — a curated spine with side branches and pick-one steps, roadmap.sh style
 
-Design notes: [docs/architecture-blog-plan.md](docs/architecture-blog-plan.md) (section 24).
+Design notes: [docs/architecture-blog-plan.md](docs/architecture-blog-plan.md) (section 24). Why each technology was chosen: [docs/adr/](docs/adr/README.md).
 
 ---
 
