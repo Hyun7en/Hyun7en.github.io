@@ -1,0 +1,14 @@
+name: DevOps
+order: 5
+description: 리눅스와 컨테이너에서 쿠버네티스, 클라우드 인프라까지.
+steps:
+  - tech: linux
+    with: [networking]
+  - tech: git
+  - tech: docker
+    with: [nginx]
+  - tech: ci-cd
+  - tech: kubernetes
+    with: [monitoring]
+  - tech: aws
+    with: [terraform]

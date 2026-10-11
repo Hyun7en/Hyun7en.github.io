@@ -1,0 +1,19 @@
+---
+import type { Track } from '../lib/tech';
+
+interface Props {
+  track: Track;
+}
+
+const { track } = Astro.props;
+const covered = track.techs.filter((t) => t.posts.length > 0).length;
+const spine = track.steps.map((step) => step.options.map((t) => t.name).join(' / '));
+---
+
+<a href={`/tracks/${track.id}/`} class="card track-card">
+  <span class="track-card-name">{track.name}</span>
+  {track.description && <span class="muted">{track.description}</span>}
+  <span class="track-card-spine">{spine.join(' → ')}</span>
+  <span class="progress-bar"><i style={`width: ${(covered / track.techs.length) * 100}%`}></i></span>
+  <span class="muted">글 있는 기술 {covered} / {track.techs.length}</span>
+</a>

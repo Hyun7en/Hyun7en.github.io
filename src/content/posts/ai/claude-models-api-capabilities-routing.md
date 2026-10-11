@@ -1,8 +1,7 @@
 ---
 title: "모델 ID 하드코딩을 끝낼 때: Claude Models API의 capabilities·line 필드로 모델 선택 코드 짜기"
 date: 2026-10-09
-category: AI
-tags: [AI, LLM, Claude, API, Models API]
+tech: [claude-api]
 description: 2026-10-01~06 사이 Anthropic Models API에 추가된 line, thinking.types.disabled, server_tools 필드가 무엇을 알려주는지 공식 문서 기준으로 정리하고, 모델 ID 분기 코드를 capability 조회 기반으로 바꾸는 방법과 한계를 다룬다.
 draft: true
 ---

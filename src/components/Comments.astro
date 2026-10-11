@@ -1,0 +1,37 @@
+---
+import { giscus } from '../site.config';
+
+// Both widgets read custom attributes the <script> element type doesn't declare, so pass them as a spread.
+const attrs = giscus.categoryId
+  ? {
+      src: 'https://giscus.app/client.js',
+      'data-repo': giscus.repo,
+      'data-repo-id': giscus.repoId,
+      'data-category': giscus.category,
+      'data-category-id': giscus.categoryId,
+      'data-mapping': 'pathname',
+      'data-strict': '1',
+      'data-reactions-enabled': '1',
+      'data-emit-metadata': '0',
+      'data-input-position': 'top',
+      'data-theme': 'light',
+      'data-lang': 'ko',
+      'data-loading': 'lazy',
+    }
+  : {
+      src: 'https://utteranc.es/client.js',
+      repo: giscus.repo,
+      'issue-term': 'pathname',
+      theme: 'github-light',
+    };
+---
+
+<section class="comments" aria-label="댓글">
+  <script is:inline crossorigin="anonymous" async {...attrs}></script>
+</section>
+
+<style>
+  .comments {
+    margin-top: 36px;
+  }
+</style>

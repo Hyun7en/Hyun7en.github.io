@@ -1,0 +1,21 @@
+name: Spring 백엔드
+order: 1
+description: Java에서 시작해 Spring Boot와 JPA로 API 서버를 만들고 배포까지.
+steps:
+  - tech: java
+    with: [git]
+  - tech: sql
+    with: [transactions-indexes]
+  - pick: [mysql, postgresql]
+  - tech: spring
+  - tech: spring-boot
+    with: [junit]
+  - tech: jpa
+    with: [spring-data-jpa, querydsl]
+  - tech: rest-api
+    with: [auth, spring-security]
+  - tech: redis
+  - tech: docker
+    with: [ci-cd]
+  - tech: msa
+    with: [kafka]

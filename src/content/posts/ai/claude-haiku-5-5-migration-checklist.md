@@ -1,8 +1,7 @@
 ---
 title: "Claude Haiku 5.5 출시: 싸진 가격보다 먼저 확인해야 할 마이그레이션 체크리스트"
 date: 2026-10-08
-category: AI
-tags: [AI, LLM, Claude, API, Migration]
+tech: [claude-api]
 description: 2026-10-07 출시된 Claude Haiku 5.5의 가격·사양과 Haiku 4.5에서 올라올 때 깨지는 지점(thinking, 샘플링 파라미터, prefill, 토큰 수)을 공식 문서 기준으로 정리하고, 실제로 갈아탈지 판단하는 기준을 제안한다.
 draft: true
 ---

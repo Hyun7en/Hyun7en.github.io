@@ -1,0 +1,136 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import DomainBadge from '../../components/DomainBadge.astro';
+import TechChip from '../../components/TechChip.astro';
+import TechTree from '../../components/TechTree.astro';
+import { getTechIndex, learningPath, techTree } from '../../lib/tech';
+import { formatDate } from '../../lib/format';
+
+export async function getStaticPaths() {
+  const index = await getTechIndex();
+  return [...index.techs.keys()].map((id) => ({ params: { id } }));
+}
+
+const index = await getTechIndex();
+const tech = index.techs.get(Astro.params.id!)!;
+const domainById = new Map(index.domains.map((d) => [d.id, d]));
+const domain = domainById.get(tech.domain)!;
+const lookup = (ids: string[]) => ids.map((id) => index.techs.get(id)!);
+
+const requires = lookup(tech.requires);
+const next = lookup(tech.next);
+const related = lookup(tech.related);
+const path = learningPath(index, tech.id);
+const prerequisites = techTree(index, tech.id, 'requires').children;
+// Two levels is enough to show where this leads without listing half the roadmap.
+const followUps = techTree(index, tech.id, 'next', 2).children;
+const tracks = index.tracks.filter((track) => track.techs.includes(tech));
+// No post on this tech yet: point readers at what leads up to it instead of a dead end.
+const prerequisitePosts =
+  tech.posts.length === 0
+    ? [...new Map(path.slice(0, -1).reverse().flatMap((t) => t.posts.map((p) => [p.id, p] as const))).values()].slice(0, 5)
+    : [];
+---
+
+<BaseLayout
+  title={tech.name}
+  description={tech.description ?? `${tech.name} 관련 글과 학습 경로`}
+  noindex={tech.posts.length === 0}
+>
+  <div class="tech-hub">
+    <article class="card tech-hub-main">
+      <DomainBadge domain={domain} />
+      <h1>{tech.name}</h1>
+      {tech.description && <p class="muted">{tech.description}</p>}
+
+      <div class="tech-flow">
+        <div>
+          <span class="tech-flow-label">← 먼저 알아야 할 기술</span>
+          {requires.length > 0
+            ? requires.map((t) => <TechChip tech={t} domain={domainById.get(t.domain)!} />)
+            : <span class="muted">없음 (시작점)</span>}
+        </div>
+        <div class="tech-flow-self" style={`--c: ${domain.color}`}>{tech.name}</div>
+        <div>
+          <span class="tech-flow-label">다음으로 이어지는 기술 →</span>
+          {next.length > 0
+            ? next.map((t) => <TechChip tech={t} domain={domainById.get(t.domain)!} />)
+            : <span class="muted">없음</span>}
+        </div>
+      </div>
+
+      <h2 class="section-title">이 기술을 다룬 글 ({tech.posts.length})</h2>
+      {tech.posts.length > 0 ? (
+        <ul class="link-list">
+          {tech.posts.map((post) => (
+            <li>
+              <a href={`/posts/${post.id}/`}>{post.title}</a>
+              <small>{formatDate(post.date)} · {lookup(post.tech).map((t) => t.name).join(', ')}</small>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <>
+          <p class="muted">아직 이 기술을 다룬 글이 없습니다.</p>
+          {prerequisitePosts.length > 0 && (
+            <>
+              <h3 class="read-next-sub">먼저 읽어 볼 선행 기술의 글</h3>
+              <ul class="link-list">
+                {prerequisitePosts.map((post) => (
+                  <li>
+                    <a href={`/posts/${post.id}/`}>{post.title}</a>
+                    <small>{formatDate(post.date)} · {lookup(post.tech).map((t) => t.name).join(', ')}</small>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+        </>
+      )}
+
+      {tech.til.length > 0 && (
+        <>
+          <h2 class="section-title">TIL / 코드</h2>
+          <ul class="link-list">
+            {tech.til.map((til) => (
+              <li>
+                <a href={`https://github.com/Hyun7en/${til.repository}/tree/main/${til.path}`} target="_blank" rel="noopener">
+                  {til.repository} / {til.path} ↗
+                </a>
+                <small>GitHub</small>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+
+      {related.length > 0 && (
+        <>
+          <h2 class="section-title">관련 기술</h2>
+          <div>{related.map((t) => <TechChip tech={t} domain={domainById.get(t.domain)!} />)}</div>
+        </>
+      )}
+    </article>
+
+    <aside class="card tech-hub-side">
+      <h2 class="section-title">{tech.name} 전에 알아야 할 것</h2>
+      {prerequisites.length > 0
+        ? <TechTree nodes={prerequisites} />
+        : <p class="muted">선행 기술 없이 시작할 수 있습니다.</p>}
+      {followUps.length > 0 && (
+        <>
+          <h2 class="section-title tech-hub-side-next">{tech.name} 다음으로</h2>
+          <TechTree nodes={followUps} />
+        </>
+      )}
+      {tracks.length > 0 && (
+        <>
+          <h2 class="section-title tech-hub-side-next">이 기술이 있는 트랙</h2>
+          <ul class="link-list">
+            {tracks.map((track) => <li><a href={`/tracks/${track.id}/`}>{track.name}</a></li>)}
+          </ul>
+        </>
+      )}
+    </aside>
+  </div>
+</BaseLayout>

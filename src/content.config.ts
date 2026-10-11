@@ -1,4 +1,4 @@
-import { defineCollection, reference, z } from 'astro:content';
+import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
 const posts = defineCollection({
@@ -7,38 +7,59 @@ const posts = defineCollection({
     title: z.string(),
     date: z.coerce.date(),
     description: z.string().optional(),
-    category: z.string().optional(),
-    tags: z.array(z.string()).default([]),
+    /** Tech ids from src/content/tech/*.yaml — validated in src/lib/tech.ts. */
+    tech: z.array(z.string()).default([]),
     draft: z.boolean().default(false),
   }),
 });
 
-const nodeTypeEnum = z.enum(['architecture', 'technology', 'concept']);
-
-const articleEntry = z.object({
-  context: z.string().optional(),
-  path: reference('posts'),
+const techSchema = z.object({
+  name: z.string(),
+  description: z.string().optional(),
+  /** Learning prerequisites: tech ids you should know before this one. */
+  requires: z.array(z.string()).default([]),
+  /** Undirected "see also" links; made symmetric in src/lib/tech.ts. */
+  related: z.array(z.string()).default([]),
+  til: z
+    .array(
+      z.object({
+        repository: z.string(),
+        path: z.string(),
+      })
+    )
+    .default([]),
 });
 
-const tilEntry = z.object({
-  context: z.string().optional(),
-  repository: z.string(),
-  path: z.string(),
-});
-
-const nodes = defineCollection({
-  loader: glob({ pattern: '**/*.yaml', base: './src/content/nodes' }),
+/** One file per domain; the file name is the domain id, `techs` keys are tech ids. */
+const domains = defineCollection({
+  loader: glob({ pattern: '*.yaml', base: './src/content/tech' }),
   schema: z.object({
     name: z.string(),
-    type: nodeTypeEnum,
+    order: z.number(),
+    color: z.string().regex(/^#[0-9a-fA-F]{6}$/),
     description: z.string().optional(),
-    parent: z.array(reference('nodes')).default([]),
-    related: z.array(reference('nodes')).default([]),
-    x: z.number().optional(),
-    y: z.number().optional(),
-    articles: z.array(articleEntry).default([]),
-    til: z.array(tilEntry).default([]),
+    techs: z.record(z.string(), techSchema),
   }),
 });
 
-export const collections = { posts, nodes };
+const stepBranches = z.array(z.string()).default([]);
+
+/** A curated learning track: a spine of steps, each one tech or a pick-one choice, plus side branches. */
+const tracks = defineCollection({
+  loader: glob({ pattern: '*.yaml', base: './src/content/tracks' }),
+  schema: z.object({
+    name: z.string(),
+    order: z.number(),
+    description: z.string().optional(),
+    steps: z
+      .array(
+        z.union([
+          z.object({ tech: z.string(), with: stepBranches }),
+          z.object({ pick: z.array(z.string()).min(2), with: stepBranches }),
+        ])
+      )
+      .min(2),
+  }),
+});
+
+export const collections = { posts, domains, tracks };

@@ -1,0 +1,11 @@
+name: 프론트엔드
+order: 3
+description: HTML/CSS에서 React, Next.js까지 웹 클라이언트 개발.
+steps:
+  - tech: html-css
+  - tech: javascript
+    with: [git]
+  - tech: typescript
+  - pick: [react, vue]
+    with: [tailwind-css, jest]
+  - tech: nextjs

@@ -1,0 +1,97 @@
+---
+interface Props {
+  /** Starting number of parent rows on the slider. */
+  initial?: number;
+  max?: number;
+}
+
+const { initial = 10, max = 100 } = Astro.props;
+---
+
+<figure class="nplus" data-nplus data-max={max}>
+  <figcaption>
+    <span class="nplus-title">N+1 쿼리 계산기</span>
+    <span class="nplus-sub">게시글 N개와 각 게시글의 댓글을 조회할 때</span>
+  </figcaption>
+  <label class="nplus-slider">
+    게시글 수 <output>{initial}</output>개
+    <input type="range" min="1" max={max} value={initial} />
+  </label>
+  <div class="nplus-row">
+    <span>지연 로딩 (N+1)</span>
+    <span class="nplus-track"><span class="nplus-bar lazy" data-lazy-bar></span></span>
+    <b data-lazy-count>{initial + 1}번</b>
+  </div>
+  <div class="nplus-row">
+    <span>fetch join</span>
+    <span class="nplus-track"><span class="nplus-bar" style={`width: ${100 / (max + 1)}%`}></span></span>
+    <b>1번</b>
+  </div>
+  <p class="nplus-note" aria-live="polite" data-note>쿼리 {initial + 1}번 → 1번으로 줄어듭니다.</p>
+</figure>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-nplus]').forEach((root) => {
+    const input = root.querySelector('input')!;
+    const max = Number(root.dataset.max);
+    const update = () => {
+      const n = Number(input.value);
+      root.querySelector('output')!.textContent = String(n);
+      root.querySelector<HTMLElement>('[data-lazy-bar]')!.style.width = `${((n + 1) / (max + 1)) * 100}%`;
+      root.querySelector('[data-lazy-count]')!.textContent = `${n + 1}번`;
+      root.querySelector('[data-note]')!.textContent = `쿼리 ${n + 1}번 → 1번으로 줄어듭니다.`;
+    };
+    input.addEventListener('input', update);
+    update();
+  });
+</script>
+
+<style>
+  .nplus {
+    margin: 24px 0;
+    padding: 18px 20px;
+    background: var(--color-surface, #fff);
+    border: 1px solid var(--color-border, #e2e8f0);
+    border-radius: var(--radius, 8px);
+    font-size: 13px;
+  }
+
+  figcaption {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 6px 10px;
+    margin-bottom: 14px;
+  }
+  .nplus-title { font-size: 14px; font-weight: 700; }
+  .nplus-sub { color: var(--color-text-sub, #64748b); }
+
+  .nplus-slider { display: block; margin-bottom: 12px; }
+  .nplus-slider input { display: block; width: 100%; accent-color: var(--color-primary, #2563eb); }
+
+  .nplus-row {
+    display: grid;
+    grid-template-columns: 120px 1fr 50px;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .nplus-row b { text-align: right; font-size: 12px; }
+
+  .nplus-track {
+    height: 10px;
+    background: var(--color-bg, #f8fafc);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .nplus-bar {
+    display: block;
+    height: 100%;
+    background: var(--color-primary, #2563eb);
+    border-radius: 4px;
+    transition: width 0.15s;
+  }
+  .nplus-bar.lazy { background: #dc2626; }
+
+  .nplus-note { margin: 8px 0 0; color: var(--color-text-sub, #64748b); }
+</style>

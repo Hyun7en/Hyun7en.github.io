@@ -1,0 +1,29 @@
+name: CS 기초
+order: 1
+color: "#475569"
+description: 어떤 기술을 공부하든 바닥에 깔리는 컴퓨터 과학 기초.
+techs:
+  data-structures:
+    name: 자료구조
+    description: 배열·리스트·해시·트리·그래프 등 데이터를 저장하고 다루는 구조.
+  algorithms:
+    name: 알고리즘
+    description: 정렬·탐색·그래프·DP 등 문제 해결 절차와 복잡도 분석.
+    requires: [data-structures]
+  operating-systems:
+    name: 운영체제
+    description: 프로세스·스레드·메모리·파일 시스템과 동시성.
+  networking:
+    name: 네트워크
+    description: TCP/IP, DNS, 라우팅 등 컴퓨터 간 통신의 기본.
+  http:
+    name: HTTP
+    description: 웹의 요청·응답 프로토콜. 메서드, 상태 코드, 헤더, 캐시.
+    requires: [networking]
+  linux:
+    name: Linux
+    description: 서버 운영의 기본 환경. 셸, 권한, 프로세스 관리.
+    requires: [operating-systems]
+  git:
+    name: Git
+    description: 분산 버전 관리. 브랜치, 머지, 리베이스.

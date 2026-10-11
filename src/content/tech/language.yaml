@@ -1,0 +1,40 @@
+name: 언어
+order: 2
+color: "#0891b2"
+description: 각 기술 스택의 출발점이 되는 프로그래밍 언어.
+techs:
+  java:
+    name: Java
+    description: JVM 기반 객체지향 언어. Spring 생태계의 출발점.
+  kotlin:
+    name: Kotlin
+    description: JVM 위의 간결한 언어. Android 공식 언어이자 Spring 지원 언어.
+    requires: [java]
+  javascript:
+    name: JavaScript
+    description: 브라우저와 Node.js에서 동작하는 웹의 기본 언어.
+  typescript:
+    name: TypeScript
+    description: JavaScript에 정적 타입을 더한 언어.
+    requires: [javascript]
+  python:
+    name: Python
+    description: 데이터·AI·자동화·웹 백엔드에 두루 쓰이는 언어.
+  go:
+    name: Go
+    description: 단순한 문법과 고루틴 기반 동시성을 갖춘 서버·인프라 언어.
+  rust:
+    name: Rust
+    description: 소유권 모델로 메모리 안전성을 보장하는 시스템 언어.
+  c:
+    name: C
+    description: 운영체제와 임베디드의 기반이 되는 저수준 언어.
+  csharp:
+    name: C#
+    description: .NET 플랫폼의 객체지향 언어.
+  swift:
+    name: Swift
+    description: Apple 플랫폼 앱 개발 언어.
+  dart:
+    name: Dart
+    description: Flutter에서 쓰는 클라이언트 최적화 언어.

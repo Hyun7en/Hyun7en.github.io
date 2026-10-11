@@ -1,0 +1,101 @@
+---
+import { Code } from 'astro:components';
+import type { ComponentProps } from 'astro/types';
+
+interface Props {
+  before: string;
+  after: string;
+  lang: ComponentProps<typeof Code>['lang'];
+  beforeLabel?: string;
+  afterLabel?: string;
+}
+
+const { before, after, lang, beforeLabel = 'Before', afterLabel = 'After' } = Astro.props;
+
+// Line diff via longest common subsequence, computed at build time.
+function lineDiff(a: string[], b: string[]): string {
+  const lcs = Array.from({ length: a.length + 1 }, () => new Array<number>(b.length + 1).fill(0));
+  for (let i = a.length - 1; i >= 0; i--) {
+    for (let j = b.length - 1; j >= 0; j--) {
+      lcs[i][j] = a[i] === b[j] ? lcs[i + 1][j + 1] + 1 : Math.max(lcs[i + 1][j], lcs[i][j + 1]);
+    }
+  }
+  const out: string[] = [];
+  let i = 0;
+  let j = 0;
+  while (i < a.length || j < b.length) {
+    if (i < a.length && j < b.length && a[i] === b[j]) {
+      out.push(`  ${a[i++]}`);
+      j++;
+    } else if (i < a.length && (j === b.length || lcs[i + 1][j] >= lcs[i][j + 1])) {
+      out.push(`- ${a[i++]}`);
+    } else {
+      out.push(`+ ${b[j++]}`);
+    }
+  }
+  return out.join('\n');
+}
+
+const diff = lineDiff(before.split('\n'), after.split('\n'));
+const tabs = [beforeLabel, afterLabel, '변경점'];
+---
+
+<figure class="code-compare" data-code-compare>
+  <div class="code-compare-tabs" role="tablist">
+    {tabs.map((label, i) => (
+      <button type="button" role="tab" aria-selected={i === 0 ? 'true' : 'false'} data-tab={i}>{label}</button>
+    ))}
+  </div>
+  <div role="tabpanel" data-panel="0"><Code code={before} lang={lang} theme="dracula" /></div>
+  <div role="tabpanel" data-panel="1" hidden><Code code={after} lang={lang} theme="dracula" /></div>
+  <div role="tabpanel" data-panel="2" hidden><Code code={diff} lang="diff" theme="dracula" /></div>
+</figure>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-code-compare]').forEach((root) => {
+    root.querySelectorAll<HTMLButtonElement>('[role=tab]').forEach((tab) => {
+      tab.addEventListener('click', () => {
+        root.querySelectorAll('[role=tab]').forEach((t) => t.setAttribute('aria-selected', String(t === tab)));
+        root.querySelectorAll<HTMLElement>('[data-panel]').forEach((panel) => {
+          panel.hidden = panel.dataset.panel !== tab.dataset.tab;
+        });
+      });
+    });
+  });
+</script>
+
+<style>
+  .code-compare {
+    margin: 24px 0;
+    padding: 16px;
+    background: var(--color-surface, #fff);
+    border: 1px solid var(--color-border, #e2e8f0);
+    border-radius: var(--radius, 8px);
+  }
+
+  .code-compare-tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+
+  .code-compare-tabs button {
+    font: inherit;
+    font-size: 12px;
+    padding: 4px 12px;
+    border: 1px solid var(--color-border, #e2e8f0);
+    background: var(--color-surface, #fff);
+    color: var(--color-text-sub, #64748b);
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  .code-compare-tabs button[aria-selected='true'] {
+    background: var(--color-primary, #2563eb);
+    border-color: var(--color-primary, #2563eb);
+    color: #fff;
+  }
+
+  .code-compare :global(pre) {
+    margin: 0;
+  }
+</style>

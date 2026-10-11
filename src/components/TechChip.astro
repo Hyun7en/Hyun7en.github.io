@@ -1,0 +1,16 @@
+---
+import type { Tech, Domain } from '../lib/tech';
+
+interface Props {
+  tech: Tech;
+  domain: Domain;
+}
+
+const { tech, domain } = Astro.props;
+---
+
+<a
+  href={`/tech/${tech.id}/`}
+  class:list={['tech-chip', { empty: tech.posts.length === 0 }]}
+  style={`--c: ${domain.color}`}
+>{tech.name}</a>

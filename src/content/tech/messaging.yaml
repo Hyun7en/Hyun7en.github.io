@@ -1,0 +1,11 @@
+name: 메시징
+order: 5
+color: "#9333ea"
+description: 서비스 간 비동기 통신과 이벤트 스트리밍.
+techs:
+  kafka:
+    name: Kafka
+    description: 분산 이벤트 스트리밍 플랫폼.
+  rabbitmq:
+    name: RabbitMQ
+    description: AMQP 기반 메시지 브로커.

@@ -1,0 +1,21 @@
+name: Mobile
+order: 7
+color: "#16a34a"
+description: iOS·Android 네이티브와 크로스플랫폼 앱 개발.
+techs:
+  ios:
+    name: iOS (UIKit/SwiftUI)
+    description: Apple 플랫폼 네이티브 앱 개발.
+    requires: [swift]
+  android:
+    name: Android (Compose)
+    description: Jetpack Compose 기반 Android 네이티브 앱 개발.
+    requires: [kotlin]
+  flutter:
+    name: Flutter
+    description: Dart 기반 크로스플랫폼 UI 프레임워크.
+    requires: [dart]
+  react-native:
+    name: React Native
+    description: React로 네이티브 앱을 만드는 크로스플랫폼 프레임워크.
+    requires: [react]

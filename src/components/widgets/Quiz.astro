@@ -1,0 +1,85 @@
+---
+interface Props {
+  question: string;
+  options: string[];
+  /** Index of the correct option (0-based). */
+  answer: number;
+  explain: string;
+}
+
+const { question, options, answer, explain } = Astro.props;
+---
+
+<figure class="quiz" data-quiz data-answer={answer}>
+  <figcaption>확인 문제</figcaption>
+  <p class="quiz-question">{question}</p>
+  <div class="quiz-options">
+    {options.map((option, i) => <button type="button" data-option={i}>{option}</button>)}
+  </div>
+  <p class="quiz-explain" role="status" hidden>{explain}</p>
+</figure>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-quiz]').forEach((root) => {
+    const answer = root.dataset.answer;
+    const buttons = root.querySelectorAll<HTMLButtonElement>('[data-option]');
+    buttons.forEach((button) => {
+      button.addEventListener('click', () => {
+        buttons.forEach((b) => {
+          b.disabled = true;
+          if (b.dataset.option === answer) b.classList.add('correct');
+        });
+        if (button.dataset.option !== answer) button.classList.add('wrong');
+        root.querySelector<HTMLElement>('.quiz-explain')!.hidden = false;
+      });
+    });
+  });
+</script>
+
+<style>
+  .quiz {
+    margin: 24px 0;
+    padding: 18px 20px;
+    background: var(--color-surface, #fff);
+    border: 1px solid var(--color-border, #e2e8f0);
+    border-radius: var(--radius, 8px);
+  }
+
+  figcaption {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+
+  .quiz-question {
+    margin: 0 0 12px;
+  }
+
+  .quiz-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .quiz-options button {
+    font: inherit;
+    font-size: 14px;
+    padding: 8px 16px;
+    border: 1px solid var(--color-border, #e2e8f0);
+    border-radius: 6px;
+    background: var(--color-surface, #fff);
+    color: var(--color-text, #1e293b);
+    cursor: pointer;
+  }
+  .quiz-options button:disabled { cursor: default; color: var(--color-text-sub, #64748b); }
+  .quiz-options button.correct { background: #dcfce7; border-color: #16a34a; color: #166534; font-weight: 600; }
+  .quiz-options button.wrong { background: #fee2e2; border-color: #dc2626; color: #991b1b; }
+
+  .quiz-explain {
+    margin: 12px 0 0;
+    padding: 10px 12px;
+    background: var(--color-tag-bg, #eff6ff);
+    border-radius: 6px;
+    font-size: 14px;
+  }
+</style>
