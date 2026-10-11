@@ -505,6 +505,8 @@ img { max-width: 100%; height: auto; display: block; }
 @media (max-width: 860px) {
   .layout {
     flex-direction: column;
+    /* flex-start would size .main to its content, so a long code line widened the page. */
+    align-items: stretch;
     margin: 24px auto;
   }
 
