@@ -58,6 +58,7 @@ For English version → [English](README.md)
 
 - `npm install && npm run dev` — 로컬 개발 서버
 - 블로그 글은 `src/content/posts/`(Markdown/MDX)에 위치. frontmatter에 `tech: [spring-boot, jpa]`로 기술을 연결
+- 글 종류는 `kind`: 기본값 `study`(직접 쓰는 학습 글, 로드맵·트랙 진행도에 집계), `news`(실습 가능한 소식 글, `/news/`에 모이고 진행도에는 집계 안 함)
 - 기술은 `src/content/tech/<분야>.yaml`에 위치. 분야당 파일 하나, 기술당 항목 하나(`requires`, `related`, `til`)
 - 학습 트랙은 `src/content/tracks/<id>.yaml`. 단계마다 `tech`(하나) 또는 `pick`(택1), 곁가지는 `with`
 - 없는 기술 ID를 쓰거나 `requires`가 순환하면 빌드가 실패

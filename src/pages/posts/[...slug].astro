@@ -69,6 +69,7 @@ const nextTechs = [...new Set(techs.flatMap((t) => t.next))]
       )}
 
       {domain && <DomainBadge domain={domain} />}
+      {post.data.kind === 'news' && <a href="/news/" class="news-badge">소식</a>}
 
       <h1 class="post-title">{post.data.title}</h1>
 

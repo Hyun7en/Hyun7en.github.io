@@ -9,6 +9,8 @@ const posts = defineCollection({
     description: z.string().optional(),
     /** Tech ids from src/content/tech/*.yaml — validated in src/lib/tech.ts. */
     tech: z.array(z.string()).default([]),
+    /** `study`: a learning post that counts toward the roadmap. `news`: a hands-on look at a recent release. */
+    kind: z.enum(['study', 'news']).default('study'),
     draft: z.boolean().default(false),
   }),
 });

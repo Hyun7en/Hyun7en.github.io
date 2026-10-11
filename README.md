@@ -59,6 +59,7 @@ Design notes: [docs/architecture-blog-plan.md](docs/architecture-blog-plan.md) (
 
 - `npm install && npm run dev` — local dev server
 - Blog posts live in `src/content/posts/` (Markdown/MDX); link a post to technologies with `tech: [spring-boot, jpa]` in its frontmatter
+- Post `kind`: `study` (default; hand-written learning posts, counted in roadmap/track progress) or `news` (hands-on looks at recent releases, listed under `/news/`, not counted)
 - Technologies live in `src/content/tech/<domain>.yaml` — one file per domain, one entry per technology (`requires`, `related`, `til`)
 - Learning tracks live in `src/content/tracks/<id>.yaml` — each step is a `tech` or a pick-one `pick`, with side topics in `with`
 - Unknown tech ids and circular `requires` fail the build

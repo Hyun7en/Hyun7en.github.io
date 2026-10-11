@@ -15,6 +15,7 @@ export interface PostSummary {
   date: Date;
   description?: string;
   tech: string[];
+  kind: 'study' | 'news';
   /** Domain of the post's first tech, used as its display category. */
   domain?: string;
 }
@@ -29,8 +30,10 @@ export interface Tech {
   next: string[];
   related: string[];
   til: { repository: string; path: string }[];
-  /** Published posts on this tech, newest first. */
+  /** Published study posts on this tech, newest first. Roadmap and track progress count only these. */
   posts: PostSummary[];
+  /** Published news posts on this tech, newest first. */
+  news: PostSummary[];
   /** 1-based column in its domain's roadmap, counting only same-domain prerequisites. */
   stage: number;
 }
@@ -54,7 +57,7 @@ export interface Track {
 export interface TechIndex {
   domains: Domain[];
   techs: Map<string, Tech>;
-  /** Published posts, newest first. */
+  /** Published posts of both kinds, newest first. */
   posts: PostSummary[];
   tracks: Track[];
 }
@@ -102,6 +105,7 @@ async function buildIndex(): Promise<TechIndex> {
         related: [...data.related],
         til: data.til,
         posts: [],
+        news: [],
         stage: 1,
       });
     }
@@ -139,10 +143,11 @@ async function buildIndex(): Promise<TechIndex> {
       date: entry.data.date,
       description: entry.data.description,
       tech: entry.data.tech,
+      kind: entry.data.kind,
       domain: techs.get(entry.data.tech[0])?.domain,
     };
     posts.push(summary);
-    for (const id of entry.data.tech) techs.get(id)?.posts.push(summary);
+    for (const id of entry.data.tech) techs.get(id)?.[summary.kind === 'news' ? 'news' : 'posts'].push(summary);
   }
   if (errors.length) throw new Error(`[tech] invalid post frontmatter:\n  ${errors.join('\n  ')}`);
 

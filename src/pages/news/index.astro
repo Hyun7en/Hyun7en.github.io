@@ -1,0 +1,25 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+import { getTechIndex } from '../../lib/tech';
+
+const index = await getTechIndex();
+const news = index.posts.filter((post) => post.kind === 'news');
+---
+
+<BaseLayout
+  title="소식"
+  description="최근 나온 릴리스·API·도구 중 직접 실습해 볼 수 있는 것을 1차 출처 기준으로 정리한 글."
+  showSidebar
+>
+  <h1 class="page-title">소식</h1>
+  <p class="page-lead">
+    최근 나온 릴리스, API, 도구 중 직접 설치해 돌려 볼 수 있는 것을 공식 문서 기준으로 정리합니다.
+    기술을 순서대로 공부한 글은 <a href="/tech/">로드맵</a>에 있습니다.
+  </p>
+
+  <div class="post-list news-list">
+    {news.map((post) => <PostCard post={post} index={index} />)}
+  </div>
+  {news.length === 0 && <p class="muted">아직 공개된 소식이 없습니다.</p>}
+</BaseLayout>
