@@ -516,3 +516,4 @@ MVP 구현이 끝났다. 아래는 실제 구현 과정에서 이 문서의 설�
 - `@xyflow/react`, `ArchitectureGraph`, `NodeDetailPanel`, `/architecture/*` 삭제
 - TIL 경로 존재 확인(빌드 시 GitHub API 호출) 삭제 — 빌드가 네트워크에 의존하지 않게 했다. 워크플로의 `GITHUB_TOKEN` 주입도 함께 뺐다
 - `getTechIndex()`는 프로덕션 빌드에서 한 번만 계산하고 캐시한다(dev에서는 매번 다시 계산)
+- React 제거: 그래프가 사라진 뒤 React를 쓰는 곳은 `BenchmarkChart` 하나였고, 상태·이벤트가 없는 정적 차트였다. Astro 컴포넌트로 바꿔 글 페이지의 사이트 JS를 0으로 만들었다. 조작이 필요한 위젯은 Astro 컴포넌트 + `<script>`로 만들고, React 전용 라이브러리(예: Sandpack)가 필요해지면 그 위젯에만 다시 붙인다

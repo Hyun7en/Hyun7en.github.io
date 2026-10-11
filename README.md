@@ -23,7 +23,7 @@ For English version → [English](README.md)
 
 **Site implementation:**
 - Astro (Content Collections + MDX)
-- React islands — only for interactive widgets inside posts (e.g. `BenchmarkChart`)
+- Widgets inside posts are Astro components (plus a small `<script>` when they need interaction) — no UI framework
 - GitHub Pages, built and deployed via GitHub Actions
 
 **Topics I study and write about:**

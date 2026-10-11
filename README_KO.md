@@ -22,7 +22,7 @@ For English version → [English](README.md)
 
 **사이트 구현 스택:**
 - Astro (Content Collections + MDX)
-- React 아일랜드 — 포스트 안의 인터랙티브 위젯(`BenchmarkChart` 등)에만 사용
+- 포스트 안 위젯은 Astro 컴포넌트(조작이 필요하면 짧은 `<script>`)로 작성 — UI 프레임워크 없음
 - GitHub Pages, GitHub Actions로 빌드/배포
 
 **다루는 학습 주제:**
