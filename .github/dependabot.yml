@@ -1,13 +1,22 @@
 version: 2
 updates:
+  # Version updates only. Security updates are on in repo settings and are
+  # not limited by these rules, so a fix that needs a new major still comes in.
   - package-ecosystem: npm
     directory: /
     schedule:
-      interval: weekly
+      interval: monthly
     groups:
-      astro:
-        patterns: ["astro", "@astrojs/*"]
+      npm:
+        patterns: ["*"]
+    ignore:
+      # Majors (Astro, MDX, TypeScript) need a migration; do them by hand.
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: github-actions
     directory: /
     schedule:
-      interval: weekly
+      interval: monthly
+    groups:
+      actions:
+        patterns: ["*"]
