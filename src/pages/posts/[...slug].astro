@@ -54,7 +54,13 @@ const nextTechs = [...new Set(techs.flatMap((t) => t.next))]
   .filter((t) => !post.data.tech.includes(t.id));
 ---
 
-<BaseLayout title={post.data.title} description={post.data.description} showSidebar>
+<BaseLayout
+  title={post.data.title}
+  description={post.data.description}
+  type="article"
+  publishedTime={post.data.date}
+  showSidebar
+>
   <article class="post-article">
     <header class="post-header">
       {prerequisites.length > 0 && (
