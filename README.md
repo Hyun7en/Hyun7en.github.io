@@ -50,6 +50,7 @@ Design notes: [docs/architecture-blog-plan.md](docs/architecture-blog-plan.md) (
 - Blog posts live in `src/content/posts/` (Markdown/MDX); link a post to technologies with `tech: [spring-boot, jpa]` in its frontmatter
 - Technologies live in `src/content/tech/<domain>.yaml` — one file per domain, one entry per technology (`requires`, `related`, `til`)
 - Unknown tech ids and circular `requires` fail the build
+- Post widgets (MDX) live in `src/components/widgets/`: `BenchmarkChart`, `CodeCompare`, `Quiz`, `Stepper`, `NPlusOneCalculator` — see each file's `Props`
 - `npm run build` — static build to `dist/`, auto-deployed via GitHub Actions on push to `main`
 
 ---

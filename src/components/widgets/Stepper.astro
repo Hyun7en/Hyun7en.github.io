@@ -1,0 +1,151 @@
+---
+interface Step {
+  /** One entry per lane; leave a lane empty when nothing happens there in this step. */
+  cells: string[];
+  note: string;
+}
+
+interface Props {
+  title: string;
+  lanes: string[];
+  steps: Step[];
+}
+
+const { title, lanes, steps } = Astro.props;
+const columns = `repeat(${lanes.length}, minmax(0, 1fr)) minmax(0, 1.2fr)`;
+---
+
+<figure class="stepper" data-stepper style={`--columns: ${columns}`}>
+  <figcaption>
+    <span class="stepper-title">{title}</span>
+    <span class="stepper-count" data-count aria-live="polite">1 / {steps.length}</span>
+  </figcaption>
+  <div class="stepper-row stepper-head">
+    {lanes.map((lane) => <span>{lane}</span>)}
+    <span>설명</span>
+  </div>
+  <ol>
+    {steps.map((step, i) => (
+      <li class:list={['stepper-row', i === 0 ? 'current' : 'upcoming']} data-step={i}>
+        {lanes.map((name, lane) => (
+          step.cells[lane]
+            ? <code data-lane={name}>{step.cells[lane]}</code>
+            : <span class="stepper-idle" aria-hidden="true"></span>
+        ))}
+        <small>{step.note}</small>
+      </li>
+    ))}
+  </ol>
+  <div class="stepper-controls">
+    <button type="button" data-prev disabled>← 이전</button>
+    <button type="button" data-next>다음 →</button>
+  </div>
+</figure>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-stepper]').forEach((root) => {
+    const steps = [...root.querySelectorAll<HTMLElement>('[data-step]')];
+    const prev = root.querySelector<HTMLButtonElement>('[data-prev]')!;
+    const next = root.querySelector<HTMLButtonElement>('[data-next]')!;
+    let current = 0;
+    const render = () => {
+      steps.forEach((li, i) => {
+        li.classList.toggle('done', i < current);
+        li.classList.toggle('current', i === current);
+        li.classList.toggle('upcoming', i > current);
+      });
+      root.querySelector('[data-count]')!.textContent = `${current + 1} / ${steps.length}`;
+      prev.disabled = current === 0;
+      next.disabled = current === steps.length - 1;
+    };
+    prev.addEventListener('click', () => { current = Math.max(0, current - 1); render(); });
+    next.addEventListener('click', () => { current = Math.min(steps.length - 1, current + 1); render(); });
+  });
+</script>
+
+<style>
+  .stepper {
+    margin: 24px 0;
+    padding: 18px 20px;
+    background: var(--color-surface, #fff);
+    border: 1px solid var(--color-border, #e2e8f0);
+    border-radius: var(--radius, 8px);
+  }
+
+  figcaption {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .stepper-title { font-size: 14px; font-weight: 700; }
+  .stepper-count { font-size: 13px; color: var(--color-text-sub, #64748b); }
+
+  .stepper ol { list-style: none; margin: 0; padding: 0; }
+
+  .stepper-row {
+    display: grid;
+    grid-template-columns: var(--columns);
+    gap: 10px;
+    align-items: center;
+    font-size: 13px;
+  }
+  .stepper-head {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--color-text-sub, #64748b);
+    padding: 0 10px 6px;
+  }
+
+  li.stepper-row {
+    margin: 0 0 4px;
+    padding: 8px 10px;
+    border-radius: 6px;
+    transition: opacity var(--transition, 0.2s ease);
+  }
+  li.current { background: var(--color-tag-bg, #eff6ff); outline: 2px solid var(--color-primary, #2563eb); }
+  li.done { opacity: 0.6; }
+  li.upcoming { opacity: 0.25; }
+
+  .stepper-row code {
+    background: none;
+    border: none;
+    color: var(--color-text, #1e293b);
+    padding: 0;
+    font-size: 13px;
+    white-space: pre-wrap;
+  }
+  .stepper-row small { color: var(--color-text-sub, #64748b); font-size: 12px; }
+
+  .stepper-controls {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .stepper-controls button {
+    font: inherit;
+    font-size: 13px;
+    padding: 5px 12px;
+    border: 1px solid var(--color-border, #e2e8f0);
+    background: var(--color-surface, #fff);
+    color: var(--color-text, #1e293b);
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  .stepper-controls button:disabled { opacity: 0.4; cursor: default; }
+
+  /* Phones: one column per step, each statement labelled with its lane. */
+  @media (max-width: 600px) {
+    .stepper-head { display: none; }
+    .stepper-row { grid-template-columns: 1fr; gap: 4px; }
+    .stepper-idle { display: none; }
+    .stepper-row code::before {
+      content: attr(data-lane) '  ';
+      font-family: var(--font-body, sans-serif);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--color-text-sub, #64748b);
+    }
+  }
+</style>

@@ -49,6 +49,7 @@ For English version → [English](README.md)
 - 블로그 글은 `src/content/posts/`(Markdown/MDX)에 위치. frontmatter에 `tech: [spring-boot, jpa]`로 기술을 연결
 - 기술은 `src/content/tech/<분야>.yaml`에 위치. 분야당 파일 하나, 기술당 항목 하나(`requires`, `related`, `til`)
 - 없는 기술 ID를 쓰거나 `requires`가 순환하면 빌드가 실패
+- 글(MDX) 안 위젯은 `src/components/widgets/`: `BenchmarkChart`, `CodeCompare`, `Quiz`, `Stepper`, `NPlusOneCalculator` — 각 파일 상단의 `Props`가 사용법
 - `npm run build` — `dist/`로 정적 빌드, `main` 브랜치 푸시 시 GitHub Actions가 자동 배포
 
 ---
