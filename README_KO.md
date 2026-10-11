@@ -31,10 +31,8 @@ For English version → [English](README.md)
 | 코드 하이라이트 | Shiki (dracula), 빌드 시 처리 |
 | 폰트 | Pretendard + JetBrains Mono, 사이트에서 직접 제공 |
 | 댓글 | giscus (GitHub Discussions) |
-| SEO | 직접 생성하는 sitemap, RSS(`@astrojs/rss`), canonical 링크, robots.txt |
-| 배포 / CI | GitHub Pages. GitHub Actions가 PR마다 `astro check`와 빌드를 돌리고, `main`은 배포 |
-
-의존성: `astro`, `@astrojs/mdx`, `@astrojs/rss`, `pretendard`, `@fontsource-variable/jetbrains-mono` / 개발용: `@astrojs/check`, `typescript`
+| SEO | 직접 생성하는 sitemap, RSS(`@astrojs/rss`), canonical 링크, Open Graph 태그, robots.txt |
+| 배포 / CI | GitHub Pages. GitHub Actions가 PR과 `main` 배포 전에 타입 검사, 빌드, 내부 링크 검사를 실행 |
 
 **다루는 학습 주제:**
 - Java, Spring Boot, JPA, Kafka 등
@@ -56,14 +54,32 @@ For English version → [English](README.md)
 
 ## 사용 방법
 
-- `npm install && npm run dev` — 로컬 개발 서버
-- 블로그 글은 `src/content/posts/`(Markdown/MDX)에 위치. frontmatter에 `tech: [spring-boot, jpa]`로 기술을 연결
-- 글 종류는 `kind`: 기본값 `study`(직접 쓰는 학습 글, 로드맵·트랙 진행도에 집계), `news`(실습 가능한 소식 글, `/news/`에 모이고 진행도에는 집계 안 함)
-- 기술은 `src/content/tech/<분야>.yaml`에 위치. 분야당 파일 하나, 기술당 항목 하나(`requires`, `related`, `til`)
-- 학습 트랙은 `src/content/tracks/<id>.yaml`. 단계마다 `tech`(하나) 또는 `pick`(택1), 곁가지는 `with`
-- 없는 기술 ID를 쓰거나 `requires`가 순환하면 빌드가 실패
-- 글(MDX) 안 위젯은 `src/components/widgets/`: `BenchmarkChart`, `CodeCompare`, `Quiz`, `Stepper`, `NPlusOneCalculator` — 각 파일 상단의 `Props`가 사용법
-- `npm run build` — `dist/`로 정적 빌드, `main` 브랜치 푸시 시 GitHub Actions가 자동 배포
+글은 `src/content/posts/`에 Markdown 또는 MDX로 씁니다. 맨 위 frontmatter에 글 정보를 적습니다.
+
+```md
+---
+title: "Spring Boot + JPA 시작하기"
+date: 2026-02-16
+description: 카드, 검색 결과, 링크 미리보기에 쓰이는 한 줄 요약
+tech: [spring-boot, jpa]   # src/content/tech/*.yaml의 기술 ID
+kind: study                # study(기본값, 진행도에 집계) | news(/news/에 모임, 집계 안 함)
+draft: false               # true면 사이트에 안 나옴
+---
+```
+
+- 기술: `src/content/tech/<분야>.yaml`. 분야당 파일 하나, 기술당 항목 하나(`requires`, `related`, `til`)
+- 학습 트랙: `src/content/tracks/<id>.yaml`. 단계마다 `tech`(하나) 또는 `pick`(택1), 곁가지는 `with`
+- 위젯(MDX): `src/components/widgets/`의 `BenchmarkChart`, `CodeCompare`, `Quiz`, `Stepper`, `NPlusOneCalculator`. 사용법은 각 파일의 `Props`
+- 없는 기술 ID를 쓰거나 `requires`가 순환하면 빌드가 실패합니다.
+
+```bash
+npm install                           # Node.js 22.12 이상
+npm run dev                           # 로컬 개발 서버 (http://localhost:4321)
+npm run check                         # 타입 검사
+npm run build && npm run check:links  # 정적 빌드 후 깨진 내부 링크 검사
+```
+
+`main`에 병합되면 GitHub Actions가 자동으로 배포합니다.
 
 ---
 
