@@ -57,6 +57,26 @@ a:hover { color: var(--color-primary-h); }
 
 img { max-width: 100%; height: auto; display: block; }
 
+.skip-link {
+  position: absolute;
+  left: 8px;
+  top: -48px;
+  z-index: 200;
+  padding: 8px 14px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  font-weight: 600;
+}
+.skip-link:focus { top: 8px; }
+.main:focus { outline: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition: none !important; }
+  .post-card:hover { transform: none; }
+}
+
 /* ===== Header ===== */
 .site-header {
   position: sticky;
@@ -282,8 +302,7 @@ img { max-width: 100%; height: auto; display: block; }
   margin: 24px 0;
   padding: 16px 20px;
   border-radius: 0 var(--radius) var(--radius) 0;
-  color: var(--color-text-sub);
-  font-style: italic;
+  color: var(--color-text);
 }
 
 .post-content hr {
@@ -292,10 +311,13 @@ img { max-width: 100%; height: auto; display: block; }
   margin: 36px 0;
 }
 
+.post-content .table-wrap {
+  overflow-x: auto;
+  margin: 24px 0;
+}
 .post-content table {
   width: 100%;
   border-collapse: collapse;
-  margin: 24px 0;
   font-size: 14px;
 }
 .post-content th,
@@ -317,7 +339,7 @@ img { max-width: 100%; height: auto; display: block; }
   font-family: var(--font-code);
   font-size: 13px;
   background: #f1f5f9;
-  color: #dc2626;
+  color: #b91c1c;
   padding: 2px 6px;
   border-radius: 4px;
   border: 1px solid var(--color-border);
@@ -365,7 +387,7 @@ img { max-width: 100%; height: auto; display: block; }
   box-shadow: var(--shadow);
 }
 
-.sidebar-widget h3 {
+.sidebar-widget h2 {
   font-size: 13px;
   font-weight: 700;
   text-transform: uppercase;
@@ -575,6 +597,10 @@ input:focus-visible {
 
 .page-title { font-size: 26px; font-weight: 700; margin-bottom: 6px; }
 .page-lead { color: var(--color-text-sub); font-size: 14px; }
+/* Links inside running text need more than color to stand out (WCAG 1.4.1). */
+.page-lead a,
+.post-content p a,
+.post-content li a { text-decoration: underline; text-underline-offset: 2px; }
 
 .section-title {
   display: flex;

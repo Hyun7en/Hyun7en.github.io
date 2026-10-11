@@ -1,6 +1,6 @@
 name: 언어
 order: 2
-color: "#0891b2"
+color: "#0e7490"
 description: 각 기술 스택의 출발점이 되는 프로그래밍 언어.
 techs:
   java:

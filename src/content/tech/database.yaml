@@ -1,6 +1,6 @@
 name: Database
 order: 4
-color: "#d97706"
+color: "#b45309"
 description: 관계형·비관계형 데이터베이스와 데이터 모델링.
 techs:
   sql:
