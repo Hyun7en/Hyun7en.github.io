@@ -25,6 +25,6 @@ export const nav = [
 export const giscus = {
   repo: 'Hyun7en/Hyun7en.github.io',
   repoId: 'R_kgDORK34SQ',
-  category: 'Comments',
-  categoryId: '',
+  category: 'Announcements',
+  categoryId: 'DIC_kwDORK34Sc4DHjtl',
 };

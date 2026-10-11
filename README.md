@@ -31,7 +31,7 @@ For English version → [English](README.md)
 | Styling | Plain CSS (`src/styles/global.css` + component-scoped styles) |
 | Code highlighting | Shiki (dracula), at build time |
 | Fonts | Pretendard + JetBrains Mono, self-hosted |
-| Comments | utterances |
+| Comments | giscus (GitHub Discussions) |
 | SEO | Generated sitemap, RSS (`@astrojs/rss`), canonical links, robots.txt |
 | Hosting / CI | GitHub Pages; GitHub Actions runs `astro check` + build on PRs and deploys `main` |
 

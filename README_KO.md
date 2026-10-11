@@ -30,7 +30,7 @@ For English version → [English](README.md)
 | 스타일 | 직접 작성한 CSS (`src/styles/global.css` + 컴포넌트별 스타일) |
 | 코드 하이라이트 | Shiki (dracula), 빌드 시 처리 |
 | 폰트 | Pretendard + JetBrains Mono, 사이트에서 직접 제공 |
-| 댓글 | utterances |
+| 댓글 | giscus (GitHub Discussions) |
 | SEO | 직접 생성하는 sitemap, RSS(`@astrojs/rss`), canonical 링크, robots.txt |
 | 배포 / CI | GitHub Pages. GitHub Actions가 PR마다 `astro check`와 빌드를 돌리고, `main`은 배포 |
 
