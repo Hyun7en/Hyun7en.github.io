@@ -16,8 +16,8 @@
   --color-code-bg:   #0f172a;
   --color-code-text: #e2e8f0;
 
-  --font-body: 'Inter', 'Noto Sans KR', -apple-system, sans-serif;
-  --font-code: 'JetBrains Mono', 'Fira Code', monospace;
+  --font-body: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-code: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, monospace;
 
   --radius: 8px;
   --shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
