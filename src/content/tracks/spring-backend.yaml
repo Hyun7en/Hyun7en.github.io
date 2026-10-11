@@ -1,21 +1,26 @@
 name: Spring 백엔드
 order: 1
 description: Java에서 시작해 Spring Boot와 JPA로 API 서버를 만들고 배포까지.
+assumes: [networking, linux]
 steps:
   - tech: java
-    with: [git]
+    with: [oop, git]
   - tech: sql
-    with: [transactions-indexes]
+    with: [data-modeling, transactions-indexes]
   - pick: [mysql, postgresql]
   - tech: spring
+    with: [design-patterns]
   - tech: spring-boot
-    with: [junit]
+    with: [testing, junit]
   - tech: jpa
     with: [spring-data-jpa, querydsl]
+  - tech: http
+    with: [web-security, auth]
   - tech: rest-api
-    with: [auth, spring-security]
+    with: [spring-security]
   - tech: redis
+    with: [caching]
   - tech: docker
     with: [ci-cd]
   - tech: msa
-    with: [kafka]
+    with: [message-queue, kafka]

@@ -49,6 +49,8 @@ export interface Track {
   id: string;
   name: string;
   description?: string;
+  /** Techs the track takes as already known. */
+  assumes: Tech[];
   steps: TrackStep[];
   /** Every tech on the track (spine and branches), deduplicated. */
   techs: Tech[];
@@ -162,10 +164,13 @@ async function buildIndex(): Promise<TechIndex> {
       options: ('tech' in step ? [step.tech] : step.pick).map(resolve).filter((t) => t !== undefined),
       branches: step.with.map(resolve).filter((t) => t !== undefined),
     }));
+    const assumes = entry.data.assumes.map(resolve).filter((t) => t !== undefined);
+    checkTrackOrder(entry.id, steps, assumes, errors);
     tracks.push({
       id: entry.id,
       name: entry.data.name,
       description: entry.data.description,
+      assumes,
       steps,
       techs: [...new Set(steps.flatMap((step) => [...step.options, ...step.branches]))],
     });
@@ -191,6 +196,28 @@ function assertAcyclic(techs: Map<string, Tech>) {
     state.set(id, 'done');
   };
   for (const id of techs.keys()) visit(id);
+}
+
+/**
+ * Every direct prerequisite of a track tech must come earlier: in an earlier step
+ * (spine or branch), in `assumes`, or, for a branch, in its own step's options or
+ * an earlier branch of that step.
+ */
+function checkTrackOrder(trackId: string, steps: TrackStep[], assumes: Tech[], errors: string[]) {
+  const known = new Set(assumes.map((t) => t.id));
+  const check = (tech: Tech) => {
+    for (const req of tech.requires) {
+      if (!known.has(req)) errors.push(`track "${trackId}": "${tech.id}" requires "${req}", which is not earlier in the track`);
+    }
+  };
+  for (const step of steps) {
+    step.options.forEach(check);
+    for (const tech of step.options) known.add(tech.id);
+    for (const tech of step.branches) {
+      check(tech);
+      known.add(tech.id);
+    }
+  }
 }
 
 function domainStage(tech: Tech, techs: Map<string, Tech>): number {

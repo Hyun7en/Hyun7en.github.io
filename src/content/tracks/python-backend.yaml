@@ -1,0 +1,20 @@
+name: Python 백엔드
+order: 3
+description: Python으로 FastAPI·Django API 서버를 만들고 배포까지.
+assumes: [networking, linux]
+steps:
+  - tech: python
+    with: [git]
+  - tech: http
+    with: [web-security]
+  - pick: [fastapi, django]
+  - tech: rest-api
+    with: [auth]
+  - tech: sql
+    with: [data-modeling, transactions-indexes]
+  - tech: postgresql
+    with: [redis]
+  - tech: testing
+    with: [pytest]
+  - tech: docker
+    with: [ci-cd]

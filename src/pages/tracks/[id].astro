@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import TechChip from '../../components/TechChip.astro';
 import { getTechIndex, type Tech } from '../../lib/tech';
 
 export async function getStaticPaths() {
@@ -9,7 +10,8 @@ export async function getStaticPaths() {
 
 const index = await getTechIndex();
 const track = index.tracks.find((t) => t.id === Astro.params.id)!;
-const colorOf = (tech: Tech) => index.domains.find((d) => d.id === tech.domain)!.color;
+const domainOf = (tech: Tech) => index.domains.find((d) => d.id === tech.domain)!;
+const colorOf = (tech: Tech) => domainOf(tech).color;
 const covered = track.techs.filter((t) => t.posts.length > 0).length;
 ---
 
@@ -18,6 +20,12 @@ const covered = track.techs.filter((t) => t.posts.length > 0).length;
     <a href="/tech/" class="muted">← 로드맵</a>
     <h1 class="page-title">{track.name}</h1>
     {track.description && <p class="page-lead">{track.description}</p>}
+    {track.assumes.length > 0 && (
+      <p class="track-assumes">
+        <span class="muted">선수 지식</span>
+        {track.assumes.map((tech) => <TechChip tech={tech} domain={domainOf(tech)} />)}
+      </p>
+    )}
     <div class="track-progress">
       <span class="progress-bar"><i style={`width: ${(covered / track.techs.length) * 100}%`}></i></span>
       <span class="muted">글 있는 기술 {covered} / {track.techs.length}</span>

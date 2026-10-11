@@ -1,5 +1,5 @@
 name: Frontend
-order: 6
+order: 7
 color: "#db2777"
 description: 웹 클라이언트 UI 개발.
 techs:
@@ -10,6 +10,10 @@ techs:
     name: React
     description: 컴포넌트 기반 UI 라이브러리.
     requires: [javascript, html-css]
+  state-management:
+    name: 상태 관리
+    description: 전역 상태와 서버 상태 관리. Redux, Zustand, TanStack Query.
+    requires: [react]
   nextjs:
     name: Next.js
     description: React 기반 풀스택 웹 프레임워크.
@@ -22,7 +26,3 @@ techs:
     name: Tailwind CSS
     description: 유틸리티 클래스 기반 CSS 프레임워크.
     requires: [html-css]
-  jest:
-    name: Jest
-    description: JavaScript 테스트 프레임워크.
-    requires: [javascript]

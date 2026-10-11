@@ -26,6 +26,7 @@ techs:
   rust:
     name: Rust
     description: 소유권 모델로 메모리 안전성을 보장하는 시스템 언어.
+    related: [c]
   c:
     name: C
     description: 운영체제와 임베디드의 기반이 되는 저수준 언어.

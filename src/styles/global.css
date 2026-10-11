@@ -964,6 +964,7 @@ input:focus-visible {
 
 .track-header { margin-bottom: 28px; }
 .track-header .page-title { margin-top: 8px; }
+.track-assumes { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 12px; font-size: 13px; }
 .track-progress {
   display: flex;
   align-items: center;

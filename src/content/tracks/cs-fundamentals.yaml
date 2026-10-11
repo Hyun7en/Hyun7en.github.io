@@ -1,0 +1,13 @@
+name: CS 기초
+order: 9
+description: 어떤 스택을 고르든 바닥에 깔리는 자료구조, 운영체제, 네트워크, 객체지향.
+steps:
+  - tech: data-structures
+  - tech: algorithms
+  - tech: operating-systems
+    with: [concurrency]
+  - tech: networking
+  - tech: http
+    with: [web-security]
+  - tech: oop
+    with: [design-patterns]

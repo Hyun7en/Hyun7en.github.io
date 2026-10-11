@@ -1,11 +1,12 @@
 name: LLM 애플리케이션
-order: 4
+order: 6
 description: LLM을 API로 호출하는 것에서 RAG, 에이전트까지.
 steps:
   - tech: python
   - tech: llm
     with: [prompt-engineering]
   - tech: claude-api
+  - tech: embeddings
+  - tech: vector-db
   - tech: rag
-    with: [vector-db]
   - tech: ai-agents

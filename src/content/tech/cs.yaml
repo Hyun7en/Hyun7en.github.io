@@ -13,6 +13,10 @@ techs:
   operating-systems:
     name: 운영체제
     description: 프로세스·스레드·메모리·파일 시스템과 동시성.
+  concurrency:
+    name: 동시성
+    description: 스레드 안전성, 락, 데드락, 비동기·이벤트 루프 모델.
+    requires: [operating-systems]
   networking:
     name: 네트워크
     description: TCP/IP, DNS, 라우팅 등 컴퓨터 간 통신의 기본.
@@ -20,10 +24,7 @@ techs:
     name: HTTP
     description: 웹의 요청·응답 프로토콜. 메서드, 상태 코드, 헤더, 캐시.
     requires: [networking]
-  linux:
-    name: Linux
-    description: 서버 운영의 기본 환경. 셸, 권한, 프로세스 관리.
-    requires: [operating-systems]
-  git:
-    name: Git
-    description: 분산 버전 관리. 브랜치, 머지, 리베이스.
+  web-security:
+    name: 웹 보안 (HTTPS/CORS/OWASP)
+    description: TLS, 동일 출처 정책과 CORS, OWASP Top 10 같은 웹 공격과 방어.
+    requires: [http]

@@ -1,17 +1,20 @@
 name: Node.js 백엔드
 order: 2
 description: JavaScript·TypeScript로 Node.js API 서버를 만들고 배포까지.
+assumes: [networking, operating-systems, linux]
 steps:
   - tech: javascript
     with: [git]
   - tech: typescript
   - tech: nodejs
-    with: [http]
+    with: [http, concurrency]
   - pick: [express, nestjs]
-    with: [jest]
+    with: [testing, jest]
   - tech: rest-api
     with: [auth, websocket]
+  - tech: sql
+    with: [data-modeling]
   - pick: [postgresql, mongodb]
-    with: [redis]
+    with: [prisma, redis]
   - tech: docker
     with: [ci-cd]

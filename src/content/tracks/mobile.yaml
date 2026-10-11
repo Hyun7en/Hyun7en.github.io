@@ -1,0 +1,12 @@
+name: 모바일
+order: 5
+description: 네이티브(iOS·Android) 또는 크로스플랫폼(Flutter) 중 하나를 골라 앱을 만들고 배포까지.
+assumes: [java, http]
+steps:
+  - pick: [swift, kotlin, dart]
+    with: [git]
+  - pick: [ios, android, flutter]
+  - tech: rest-api
+    with: [auth]
+  - tech: testing
+  - tech: ci-cd

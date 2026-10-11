@@ -1,12 +1,23 @@
 name: DevOps·Cloud
-order: 8
+order: 9
 color: "#0f766e"
 description: 컨테이너, 배포 자동화, 클라우드 인프라와 운영.
 techs:
+  linux:
+    name: Linux
+    description: 서버 운영의 기본 환경. 셸, 권한, 프로세스 관리.
+    requires: [operating-systems]
+  git:
+    name: Git
+    description: 분산 버전 관리. 브랜치, 머지, 리베이스.
   docker:
     name: Docker
     description: 애플리케이션을 컨테이너 이미지로 패키징하고 실행.
     requires: [linux]
+  docker-compose:
+    name: Docker Compose
+    description: 여러 컨테이너를 한 파일로 정의하고 함께 실행.
+    requires: [docker]
   kubernetes:
     name: Kubernetes
     description: 컨테이너 오케스트레이션 플랫폼.
