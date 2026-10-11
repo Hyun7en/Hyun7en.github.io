@@ -230,3 +230,33 @@ export function recommendedPaths(index: TechIndex, limit = 2): FlowPath[] {
   }
   return picked;
 }
+
+export interface TreeNode {
+  tech: Tech;
+  /** Already shown earlier in this tree; rendered once more but not expanded again. */
+  repeated: boolean;
+  children: TreeNode[];
+}
+
+/**
+ * Prerequisites of `id` as a tree (children = `requires`), or what builds on it
+ * (children = `next`). Techs with several parents would appear more than once;
+ * only the first occurrence is expanded.
+ */
+export function techTree(
+  index: TechIndex,
+  id: string,
+  direction: 'requires' | 'next',
+  maxDepth = Infinity
+): TreeNode {
+  const seen = new Set<string>();
+  const build = (techId: string, depth: number): TreeNode => {
+    const tech = index.techs.get(techId)!;
+    const repeated = seen.has(techId);
+    seen.add(techId);
+    const children =
+      repeated || depth >= maxDepth ? [] : tech[direction].map((childId) => build(childId, depth + 1));
+    return { tech, repeated, children };
+  };
+  return build(id, 0);
+}

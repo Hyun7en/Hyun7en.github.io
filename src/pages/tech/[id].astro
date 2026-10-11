@@ -2,7 +2,8 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import DomainBadge from '../../components/DomainBadge.astro';
 import TechChip from '../../components/TechChip.astro';
-import { getTechIndex, learningPath } from '../../lib/tech';
+import TechTree from '../../components/TechTree.astro';
+import { getTechIndex, learningPath, techTree } from '../../lib/tech';
 import { formatDate } from '../../lib/format';
 
 export async function getStaticPaths() {
@@ -20,6 +21,9 @@ const requires = lookup(tech.requires);
 const next = lookup(tech.next);
 const related = lookup(tech.related);
 const path = learningPath(index, tech.id);
+const prerequisites = techTree(index, tech.id, 'requires').children;
+// Two levels is enough to show where this leads without listing half the roadmap.
+const followUps = techTree(index, tech.id, 'next', 2).children;
 // No post on this tech yet: point readers at what leads up to it instead of a dead end.
 const prerequisitePosts =
   tech.posts.length === 0
@@ -108,14 +112,16 @@ const prerequisitePosts =
     </article>
 
     <aside class="card tech-hub-side">
-      <h2 class="section-title">{tech.name}까지의 학습 경로</h2>
-      <ol class="learning-path">
-        {path.map((step) => (
-          <li class:list={{ current: step.id === tech.id, empty: step.posts.length === 0 }}>
-            {step.id === tech.id ? <b>{step.name} ← 지금 여기</b> : <a href={`/tech/${step.id}/`}>{step.name}</a>}
-          </li>
-        ))}
-      </ol>
+      <h2 class="section-title">{tech.name} 전에 알아야 할 것</h2>
+      {prerequisites.length > 0
+        ? <TechTree nodes={prerequisites} />
+        : <p class="muted">선행 기술 없이 시작할 수 있습니다.</p>}
+      {followUps.length > 0 && (
+        <>
+          <h2 class="section-title tech-hub-side-next">{tech.name} 다음으로</h2>
+          <TechTree nodes={followUps} />
+        </>
+      )}
     </aside>
   </div>
 </BaseLayout>

@@ -805,6 +805,7 @@ input:focus-visible {
 .tech-hub-main .section-title:first-of-type { margin-top: 28px; }
 .tech-hub-side { padding: 20px; position: sticky; top: 84px; }
 .tech-hub-side .section-title { margin-top: 0; }
+.tech-hub-side .section-title.tech-hub-side-next { margin-top: 24px; }
 .tech-flow {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
@@ -837,17 +838,21 @@ input:focus-visible {
 
 /* ===== Post page ===== */
 .post-trail {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 4px 6px;
-  font-size: 13px;
   margin-bottom: 14px;
+  font-size: 13px;
 }
-.post-trail .muted { margin-right: 4px; }
-.post-trail a { color: var(--color-text-sub); }
-.post-trail a.current { color: var(--color-primary); font-weight: 600; }
-.post-trail-sep { color: #cbd5e1; }
+.post-trail summary {
+  cursor: pointer;
+  color: var(--color-text-sub);
+  width: fit-content;
+}
+.post-trail summary b { color: var(--color-primary); font-weight: 600; }
+.post-trail[open] summary { margin-bottom: 8px; }
+.post-trail-tree {
+  padding: 12px 14px;
+  background: var(--color-bg);
+  border-radius: var(--radius);
+}
 .post-header .domain-badge { margin-bottom: 12px; }
 
 .read-next { margin-top: 24px; padding: 4px 28px 22px; }

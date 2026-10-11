@@ -3,8 +3,9 @@ import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import DomainBadge from '../../components/DomainBadge.astro';
 import TechChip from '../../components/TechChip.astro';
+import TechTree from '../../components/TechTree.astro';
 import { formatDate, formatDateLong } from '../../lib/format';
-import { getTechIndex, learningPath, type PostSummary, type Tech } from '../../lib/tech';
+import { getTechIndex, techTree, type PostSummary, type Tech } from '../../lib/tech';
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts', ({ data }) => !data.draft);
@@ -25,8 +26,13 @@ const domainById = new Map(index.domains.map((d) => [d.id, d]));
 const techs = post.data.tech.map((id) => index.techs.get(id)!);
 const primary = techs[0];
 const domain = primary ? domainById.get(primary.domain) : undefined;
-// Learning order up to the post's main tech, so readers see where this post sits.
-const trail = primary ? learningPath(index, primary.id) : [];
+// What the post's main tech builds on, so readers see where this post sits.
+const prerequisites = primary ? techTree(index, primary.id, 'requires').children : [];
+const prerequisiteCount = new Set(
+  (function collect(nodes): string[] {
+    return nodes.flatMap((n) => [n.tech.id, ...collect(n.children)]);
+  })(prerequisites)
+).size;
 
 // "Read next" follows the tech flow instead of publish date.
 const seen = new Set([post.id]);
@@ -53,16 +59,15 @@ const nextTechs = [...new Set(techs.flatMap((t) => t.next))]
 <BaseLayout title={post.data.title} description={post.data.description} showSidebar>
   <article class="post-article">
     <header class="post-header">
-      {trail.length > 1 && (
-        <nav class="post-trail" aria-label="학습 순서">
-          <span class="muted">학습 순서</span>
-          {trail.map((step, i) => (
-            <>
-              {i > 0 && <span class="post-trail-sep">›</span>}
-              <a href={`/tech/${step.id}/`} class:list={{ current: step.id === primary.id }}>{step.name}</a>
-            </>
-          ))}
-        </nav>
+      {prerequisites.length > 0 && (
+        <details class="post-trail">
+          <summary>
+            <b>{primary.name}</b> 전에 알아야 할 기술 {prerequisiteCount}개
+          </summary>
+          <div class="post-trail-tree">
+            <TechTree nodes={prerequisites} />
+          </div>
+        </details>
       )}
 
       {domain && <DomainBadge domain={domain} />}
