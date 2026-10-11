@@ -5,6 +5,7 @@ import TechChip from '../../components/TechChip.astro';
 import TechTree from '../../components/TechTree.astro';
 import { getTechIndex, learningPath, techTree } from '../../lib/tech';
 import { formatDate } from '../../lib/format';
+import { author } from '../../site.config';
 
 export async function getStaticPaths() {
   const index = await getTechIndex();
@@ -108,7 +109,7 @@ const prerequisitePosts =
           <ul class="link-list">
             {tech.til.map((til) => (
               <li>
-                <a href={`https://github.com/Hyun7en/${til.repository}/tree/main/${til.path}`} target="_blank" rel="noopener">
+                <a href={`https://github.com/${author.github}/${til.repository}/tree/main/${til.path}`} target="_blank" rel="noopener">
                   {til.repository} / {til.path} ↗
                 </a>
                 <small>GitHub</small>
