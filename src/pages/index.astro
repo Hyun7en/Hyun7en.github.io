@@ -19,6 +19,8 @@ const activeDomains = domainProgress
   .filter((d) => d.covered > 0)
   .sort((a, b) => b.covered - a.covered || a.domain.order - b.domain.order);
 const idleDomains = domainProgress.filter((d) => d.covered === 0);
+// Tracks with no posts yet stay on /tech/; the home page shows only ones in progress.
+const activeTracks = index.tracks.filter((track) => track.techs.some((t) => t.posts.length > 0));
 ---
 
 <BaseLayout>
@@ -28,7 +30,7 @@ const idleDomains = domainProgress.filter((d) => d.covered === 0);
       <p>무엇을 알아야 다음 기술로 넘어갈 수 있는지, 글과 코드로 연결합니다.</p>
       <dl class="home-stats">
         <div><dt>글</dt><dd>{index.posts.length}</dd></div>
-        <div><dt>다룬 기술</dt><dd>{coveredCount} / {allTechs.length}</dd></div>
+        <div><dt>다룬 기술</dt><dd>{coveredCount}</dd></div>
         <div><dt>분야</dt><dd>{index.domains.length}</dd></div>
       </dl>
     </div>
@@ -37,15 +39,6 @@ const idleDomains = domainProgress.filter((d) => d.covered === 0);
       <a href="/posts/" class="btn">전체 글</a>
     </div>
   </section>
-
-  {index.tracks.length > 0 && (
-    <section>
-      <h2 class="section-title">학습 트랙 <a href="/tech/">로드맵 전체 →</a></h2>
-      <div class="track-grid">
-        {index.tracks.map((track) => <TrackCard track={track} />)}
-      </div>
-    </section>
-  )}
 
   <section>
     <h2 class="section-title">최근 글 <a href="/posts/">전체 보기 →</a></h2>
@@ -57,6 +50,15 @@ const idleDomains = domainProgress.filter((d) => d.covered === 0);
       <p class="muted">아직 공개된 글이 없습니다.</p>
     )}
   </section>
+
+  {activeTracks.length > 0 && (
+    <section>
+      <h2 class="section-title">진행 중인 트랙 <a href="/tech/">트랙 전체 →</a></h2>
+      <div class="track-grid">
+        {activeTracks.map((track) => <TrackCard track={track} />)}
+      </div>
+    </section>
+  )}
 
   <section>
     <h2 class="section-title">분야별 진행도 <a href="/tech/">로드맵 전체 →</a></h2>
