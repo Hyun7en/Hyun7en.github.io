@@ -35,7 +35,7 @@ const prerequisitePosts =
 <BaseLayout
   title={tech.name}
   description={tech.description ?? `${tech.name} 관련 글과 학습 경로`}
-  noindex={tech.posts.length === 0}
+  noindex={tech.posts.length === 0 && tech.news.length === 0}
 >
   <div class="tech-hub">
     <article class="card tech-hub-main">
@@ -85,6 +85,20 @@ const prerequisitePosts =
               </ul>
             </>
           )}
+        </>
+      )}
+
+      {tech.news.length > 0 && (
+        <>
+          <h2 class="section-title">관련 소식 ({tech.news.length}) <a href="/news/">소식 전체 →</a></h2>
+          <ul class="link-list">
+            {tech.news.map((post) => (
+              <li>
+                <a href={`/posts/${post.id}/`}>{post.title}</a>
+                <small>{formatDate(post.date)}</small>
+              </li>
+            ))}
+          </ul>
         </>
       )}
 

@@ -14,6 +14,7 @@ export const nav = [
   { title: 'Home', url: '/' },
   { title: 'Roadmap', url: '/tech/' },
   { title: 'Posts', url: '/posts/' },
+  { title: 'News', url: '/news/' },
   { title: 'About', url: '/about/' },
 ];
 

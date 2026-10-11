@@ -18,6 +18,7 @@ const techs = post.tech.map((id) => index.techs.get(id)!);
 <article class="post-card" data-domain={post.domain}>
   <div class="post-card-meta">
     {domain && <DomainBadge domain={domain} />}
+    {post.kind === 'news' && <a href="/news/" class="news-badge">소식</a>}
     <span>{formatDate(post.date)}</span>
   </div>
 
