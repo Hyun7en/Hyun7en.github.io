@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import TrackCard from '../../components/TrackCard.astro';
 import { getTechIndex } from '../../lib/tech';
 
 const index = await getTechIndex();
@@ -27,6 +28,16 @@ const hiddenCount = [...index.techs.values()].filter((t) => t.posts.length === 0
     오른쪽으로 갈수록 같은 분야의 선행 기술이 더 필요한 단계입니다. 카드를 누르면 그 기술의 글과 학습 경로를 볼 수 있습니다.
   </p>
 
+  {index.tracks.length > 0 && (
+    <section>
+      <h2 class="section-title">학습 트랙</h2>
+      <div class="track-grid">
+        {index.tracks.map((track) => <TrackCard track={track} />)}
+      </div>
+    </section>
+  )}
+
+  <h2 class="section-title">분야별 기술</h2>
   <div class="roadmap-toolbar">
     <label class="toggle">
       <input type="checkbox" id="covered-only" checked />

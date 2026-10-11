@@ -42,4 +42,24 @@ const domains = defineCollection({
   }),
 });
 
-export const collections = { posts, domains };
+const stepBranches = z.array(z.string()).default([]);
+
+/** A curated learning track: a spine of steps, each one tech or a pick-one choice, plus side branches. */
+const tracks = defineCollection({
+  loader: glob({ pattern: '*.yaml', base: './src/content/tracks' }),
+  schema: z.object({
+    name: z.string(),
+    order: z.number(),
+    description: z.string().optional(),
+    steps: z
+      .array(
+        z.union([
+          z.object({ tech: z.string(), with: stepBranches }),
+          z.object({ pick: z.array(z.string()).min(2), with: stepBranches }),
+        ])
+      )
+      .min(2),
+  }),
+});
+
+export const collections = { posts, domains, tracks };

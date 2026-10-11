@@ -24,6 +24,7 @@ const path = learningPath(index, tech.id);
 const prerequisites = techTree(index, tech.id, 'requires').children;
 // Two levels is enough to show where this leads without listing half the roadmap.
 const followUps = techTree(index, tech.id, 'next', 2).children;
+const tracks = index.tracks.filter((track) => track.techs.includes(tech));
 // No post on this tech yet: point readers at what leads up to it instead of a dead end.
 const prerequisitePosts =
   tech.posts.length === 0
@@ -120,6 +121,14 @@ const prerequisitePosts =
         <>
           <h2 class="section-title tech-hub-side-next">{tech.name} 다음으로</h2>
           <TechTree nodes={followUps} />
+        </>
+      )}
+      {tracks.length > 0 && (
+        <>
+          <h2 class="section-title tech-hub-side-next">이 기술이 있는 트랙</h2>
+          <ul class="link-list">
+            {tracks.map((track) => <li><a href={`/tracks/${track.id}/`}>{track.name}</a></li>)}
+          </ul>
         </>
       )}
     </aside>

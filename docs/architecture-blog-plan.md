@@ -517,3 +517,8 @@ MVP 구현이 끝났다. 아래는 실제 구현 과정에서 이 문서의 설�
 - TIL 경로 존재 확인(빌드 시 GitHub API 호출) 삭제 — 빌드가 네트워크에 의존하지 않게 했다. 워크플로의 `GITHUB_TOKEN` 주입도 함께 뺐다
 - `getTechIndex()`는 프로덕션 빌드에서 한 번만 계산하고 캐시한다(dev에서는 매번 다시 계산)
 - React 제거: 그래프가 사라진 뒤 React를 쓰는 곳은 `BenchmarkChart` 하나였고, 상태·이벤트가 없는 정적 차트였다. Astro 컴포넌트로 바꿔 글 페이지의 사이트 JS를 0으로 만들었다. 조작이 필요한 위젯은 Astro 컴포넌트 + `<script>`로 만들고, React 전용 라이브러리(예: Sandpack)가 필요해지면 그 위젯에만 다시 붙인다
+
+**후속 변경 (같은 날)**
+- 학습 트랙(`src/content/tracks/*.yaml`, `/tracks/<id>/`): roadmap.sh처럼 직접 고른 중심 줄기 + 곁가지(`with`) + 택1 단계(`pick`). 홈의 자동 추천 경로를 대체했다
+- 기술 허브·글 상단의 학습 경로를 일직선 목록 대신 트리로 표시(여러 선행 기술이 갈라지는 구조가 보이도록)
+- 글 위젯 5종(`src/components/widgets/`), sitemap·RSS·canonical, 폰트 직접 호스팅, PR마다 `astro check` + 빌드

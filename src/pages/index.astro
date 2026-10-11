@@ -1,12 +1,11 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
-import FlowPath from '../components/FlowPath.astro';
-import { getTechIndex, recommendedPaths } from '../lib/tech';
+import TrackCard from '../components/TrackCard.astro';
+import { getTechIndex } from '../lib/tech';
 
 const index = await getTechIndex();
 const recentPosts = index.posts.slice(0, 6);
-const paths = recommendedPaths(index);
 const allTechs = [...index.techs.values()];
 const coveredCount = allTechs.filter((t) => t.posts.length > 0).length;
 
@@ -39,10 +38,12 @@ const idleDomains = domainProgress.filter((d) => d.covered === 0);
     </div>
   </section>
 
-  {paths.length > 0 && (
+  {index.tracks.length > 0 && (
     <section>
-      <h2 class="section-title">추천 학습 경로 <a href="/tech/">로드맵에서 보기 →</a></h2>
-      {paths.map((path) => <FlowPath path={path} index={index} />)}
+      <h2 class="section-title">학습 트랙 <a href="/tech/">로드맵 전체 →</a></h2>
+      <div class="track-grid">
+        {index.tracks.map((track) => <TrackCard track={track} />)}
+      </div>
     </section>
   )}
 

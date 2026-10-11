@@ -35,11 +35,28 @@ export interface Tech {
   stage: number;
 }
 
+export interface TrackStep {
+  /** One tech, or several when the step is "pick one of these". */
+  options: Tech[];
+  /** Side topics worth learning alongside this step. */
+  branches: Tech[];
+}
+
+export interface Track {
+  id: string;
+  name: string;
+  description?: string;
+  steps: TrackStep[];
+  /** Every tech on the track (spine and branches), deduplicated. */
+  techs: Tech[];
+}
+
 export interface TechIndex {
   domains: Domain[];
   techs: Map<string, Tech>;
   /** Published posts, newest first. */
   posts: PostSummary[];
+  tracks: Track[];
 }
 
 let cached: Promise<TechIndex> | undefined;
@@ -129,7 +146,28 @@ async function buildIndex(): Promise<TechIndex> {
   }
   if (errors.length) throw new Error(`[tech] invalid post frontmatter:\n  ${errors.join('\n  ')}`);
 
-  return { domains, techs, posts };
+  const tracks: Track[] = [];
+  for (const entry of (await getCollection('tracks')).sort((a, b) => a.data.order - b.data.order)) {
+    const resolve = (id: string) => {
+      const tech = techs.get(id);
+      if (!tech) errors.push(`track "${entry.id}" references unknown tech "${id}"`);
+      return tech;
+    };
+    const steps = entry.data.steps.map((step) => ({
+      options: ('tech' in step ? [step.tech] : step.pick).map(resolve).filter((t) => t !== undefined),
+      branches: step.with.map(resolve).filter((t) => t !== undefined),
+    }));
+    tracks.push({
+      id: entry.id,
+      name: entry.data.name,
+      description: entry.data.description,
+      steps,
+      techs: [...new Set(steps.flatMap((step) => [...step.options, ...step.branches]))],
+    });
+  }
+  if (errors.length) throw new Error(`[tech] invalid track data:\n  ${errors.join('\n  ')}`);
+
+  return { domains, techs, posts, tracks };
 }
 
 function assertAcyclic(techs: Map<string, Tech>) {
@@ -168,67 +206,6 @@ export function learningPath(index: TechIndex, id: string): Tech[] {
   };
   visit(id);
   return order;
-}
-
-export interface FlowPath {
-  steps: Tech[];
-  /** A follow-up tech to suggest after the last step, if any. */
-  upcoming?: Tech;
-  postCount: number;
-}
-
-/**
- * Picks up to `limit` single-line chains through the `requires` graph that
- * cover the most techs with posts, so the home page can show "read along this
- * flow" without anyone curating it by hand.
- */
-export function recommendedPaths(index: TechIndex, limit = 2): FlowPath[] {
-  const best = new Map<string, { chain: Tech[]; covered: number }>();
-  const bestChain = (tech: Tech): { chain: Tech[]; covered: number } => {
-    const hit = best.get(tech.id);
-    if (hit) return hit;
-    let prefix = { chain: [] as Tech[], covered: 0 };
-    for (const id of tech.requires) {
-      const candidate = bestChain(index.techs.get(id)!);
-      if (
-        candidate.covered > prefix.covered ||
-        (candidate.covered === prefix.covered && candidate.chain.length > prefix.chain.length)
-      ) {
-        prefix = candidate;
-      }
-    }
-    const result = {
-      chain: [...prefix.chain, tech],
-      covered: prefix.covered + (tech.posts.length > 0 ? 1 : 0),
-    };
-    best.set(tech.id, result);
-    return result;
-  };
-
-  const postIdsOf = (chain: Tech[]) => new Set(chain.flatMap((t) => t.posts.map((p) => p.id)));
-  const candidates = [...index.techs.values()]
-    .filter((t) => t.posts.length > 0)
-    .map((t) => ({ ...bestChain(t), postIds: postIdsOf(bestChain(t).chain) }))
-    .filter((c) => c.chain.length > 1)
-    .sort(
-      (a, b) =>
-        b.covered - a.covered || b.postIds.size - a.postIds.size || b.chain.length - a.chain.length
-    );
-
-  const picked: FlowPath[] = [];
-  const shown = new Set<string>();
-  for (const { chain, postIds } of candidates) {
-    if (picked.length >= limit) break;
-    // A path whose posts are all in an earlier path only repeats it.
-    if ([...postIds].every((id) => shown.has(id))) continue;
-    postIds.forEach((id) => shown.add(id));
-    const last = chain[chain.length - 1];
-    const upcoming = last.next
-      .map((id) => index.techs.get(id)!)
-      .sort((a, b) => b.posts.length - a.posts.length || a.name.localeCompare(b.name))[0];
-    picked.push({ steps: chain, upcoming, postCount: postIds.size });
-  }
-  return picked;
 }
 
 export interface TreeNode {
