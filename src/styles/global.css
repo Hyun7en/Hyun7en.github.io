@@ -776,7 +776,7 @@ input:focus-visible {
   font-size: 11px;
   font-weight: 700;
 }
-.roadmap-tech.empty { opacity: 0.5; border-style: dashed; border-left-style: solid; }
+.roadmap-tech.empty { color: var(--color-text-sub); border-style: dashed; border-left-style: solid; }
 .roadmap-idle { display: none; margin-top: 20px; }
 
 .roadmap.covered-only .roadmap-tech.empty,
