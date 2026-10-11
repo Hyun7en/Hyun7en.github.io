@@ -23,7 +23,7 @@ For English version → [English](README.md)
 
 **Site implementation:**
 - Astro (Content Collections + MDX)
-- React islands — `@xyflow/react` for the Architecture graph
+- React islands — only for interactive widgets inside posts (e.g. `BenchmarkChart`)
 - GitHub Pages, built and deployed via GitHub Actions
 
 **Topics I study and write about:**
@@ -31,17 +31,25 @@ For English version → [English](README.md)
 
 ---
 
-## Architecture
+## Tech Flow
 
-Instead of a plain category list, the home page shows an interactive graph (Architecture → Technology → Concept) that connects the technologies I study, the blog posts explaining them, and the real implementation code in my [TIL repository](https://github.com/Hyun7en/MY_PJT). Full design rationale and data model: [docs/architecture-blog-plan.md](docs/architecture-blog-plan.md).
+Every technology lists the ones you should know first (`requires`). From that alone the site derives:
+
+- **Roadmap** (`/tech/`) — each domain laid out stage by stage, filterable to technologies that already have posts
+- **Tech hubs** (`/tech/<id>/`) — prerequisites ← tech → what comes next, the full learning path, its posts and TIL code
+- **Read next** at the end of each post — posts on the technologies that build on this one
+- **Recommended paths** on the home page — chosen automatically from where posts have piled up
+
+Design notes: [docs/architecture-blog-plan.md](docs/architecture-blog-plan.md) (section 24).
 
 ---
 
 ## How to Use
 
 - `npm install && npm run dev` — local dev server
-- Blog posts live in `src/content/posts/` (Markdown/MDX)
-- Architecture/Technology/Concept nodes live in `src/content/nodes/` (YAML)
+- Blog posts live in `src/content/posts/` (Markdown/MDX); link a post to technologies with `tech: [spring-boot, jpa]` in its frontmatter
+- Technologies live in `src/content/tech/<domain>.yaml` — one file per domain, one entry per technology (`requires`, `related`, `til`)
+- Unknown tech ids and circular `requires` fail the build
 - `npm run build` — static build to `dist/`, auto-deployed via GitHub Actions on push to `main`
 
 ---

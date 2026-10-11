@@ -1,37 +1,63 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { formatDate } from '../../lib/format';
+import PostCard from '../../components/PostCard.astro';
+import { getTechIndex } from '../../lib/tech';
 
-const posts = (await getCollection('posts', ({ data }) => !data.draft))
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const index = await getTechIndex();
+const domainsWithPosts = index.domains
+  .map((domain) => ({ domain, count: index.posts.filter((p) => p.domain === domain.id).length }))
+  .filter(({ count }) => count > 0);
 ---
 
 <BaseLayout title="Posts" showSidebar>
-  <div class="post-list">
-    {posts.map((post) => (
-      <article class="post-card">
-        <div class="post-card-meta">
-          {post.data.category && (
-            <span class="post-card-category">{post.data.category}</span>
-          )}
-          <span>{formatDate(post.data.date)}</span>
-        </div>
+  <h1 class="page-title">전체 글</h1>
 
-        <a href={`/posts/${post.id}/`} class="post-card-title">{post.data.title}</a>
+  {domainsWithPosts.length > 1 && (
+    <div class="filter-chips" id="domain-filter" role="group" aria-label="분야 필터">
+      <button type="button" data-domain="" aria-pressed="true">전체 {index.posts.length}</button>
+      {domainsWithPosts.map(({ domain, count }) => (
+        <button type="button" data-domain={domain.id} aria-pressed="false" style={`--c: ${domain.color}`}>
+          {domain.name} {count}
+        </button>
+      ))}
+    </div>
+  )}
 
-        {post.data.description && (
-          <p class="post-card-excerpt">{post.data.description}</p>
-        )}
-
-        {post.data.tags.length > 0 && (
-          <div class="post-card-tags">
-            {post.data.tags.slice(0, 4).map((tag) => (
-              <span class="tag"># {tag}</span>
-            ))}
-          </div>
-        )}
-      </article>
-    ))}
+  <div class="post-list" id="post-list">
+    {index.posts.map((post) => <PostCard post={post} index={index} />)}
   </div>
+  {index.posts.length === 0 && <p class="muted">아직 공개된 글이 없습니다.</p>}
 </BaseLayout>
+
+<script>
+  const filter = document.getElementById('domain-filter');
+  const list = document.getElementById('post-list');
+
+  function apply(domain: string) {
+    if (!filter || !list) return;
+    const known = filter.querySelector(`[data-domain="${CSS.escape(domain)}"]`) ? domain : '';
+    filter.querySelectorAll<HTMLButtonElement>('button').forEach((b) => {
+      b.setAttribute('aria-pressed', String(b.dataset.domain === known));
+    });
+    list.querySelectorAll<HTMLElement>('.post-card').forEach((card) => {
+      card.hidden = known !== '' && card.dataset.domain !== known;
+    });
+  }
+
+  if (filter) {
+    apply(new URLSearchParams(location.search).get('domain') ?? '');
+    filter.addEventListener('click', (e) => {
+      const button = (e.target as HTMLElement).closest('button');
+      if (!button) return;
+      const domain = button.dataset.domain ?? '';
+      const url = new URL(location.href);
+      if (domain) url.searchParams.set('domain', domain);
+      else url.searchParams.delete('domain');
+      history.pushState(null, '', url);
+      apply(domain);
+    });
+    window.addEventListener('popstate', () => {
+      apply(new URLSearchParams(location.search).get('domain') ?? '');
+    });
+  }
+</script>

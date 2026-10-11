@@ -1,8 +1,7 @@
 ---
 title: "Node.js 26.11 살펴보기: --process-timeout과 histogram.diff()로 멈춘 프로세스와 지연 시간을 다루는 법"
 date: 2026-10-08
-category: Node.js
-tags: [Node.js, Backend, Observability, CI]
+tech: [nodejs, ci-cd]
 description: Node.js 26.11.0에 추가된 --process-timeout, histogram.snapshot()/diff(), http.isValidHeaderName() 등 운영·진단 관련 API를 공식 문서 기준으로 정리하고 실무 적용 기준을 판단한다.
 draft: true
 ---

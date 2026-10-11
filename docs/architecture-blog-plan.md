@@ -1,5 +1,7 @@
 # Architecture-Based Developer Knowledge Blog (v2)
 
+> **2026-10-11 갱신:** 그래프 UI(React Flow)와 Architecture → Technology → Concept 계층은 **기술 흐름(로드맵) 모델로 대체**됐다. 현재 구조는 24절을 기준으로 본다. 1~23절은 v2 설계 기록으로 남겨 둔다.
+
 ## 1. Project Overview
 
 GitHub Pages 기반의 개발 블로그를 구축한다.
@@ -491,3 +493,26 @@ MVP 구현이 끝났다. 아래는 실제 구현 과정에서 이 문서의 설�
 **댓글**: Utterances(`repo="Hyun7en/Hyun7en.github.io"`)는 그대로 유지했다 — 정적 `<script>` 태그라 SSG를 뭘 쓰든 마이그레이션 비용이 없다.
 
 **남은 것**: `CodeDiff` 컴포넌트(11절 저장소 구조에는 있지만 MVP 범위 밖), Knowledge Graph 뷰/검색/추천/TIL 자동 연동 등 21절의 Future Features는 전부 미착수.
+
+---
+
+# 24. 기술 흐름 모델로 전환 (2026-10-11)
+
+그래프 홈은 실제 운영에서 두 가지 문제가 있었다. 노드 YAML에 글을 거꾸로 등록해야 해서 연결이 금방 밀렸고(글 5편 중 1편만 연결, 노드 7개 중 6개가 빈 상태), 검색으로 글에 바로 들어오는 독자에게는 홈 그래프가 거의 쓰이지 않았다. 그래서 "어떤 기술 다음에 어떤 기술이 이어지는가"를 정적 페이지로 보여주는 구조로 바꿨다.
+
+**데이터 (원본은 두 곳)**
+- `src/content/tech/<domain>.yaml` — 분야당 파일 하나. 파일명이 분야 ID, `techs` 키가 기술 ID. 기술마다 `requires`(학습 선행), `related`(방향 없는 연관), `til`만 손으로 적는다.
+- 글 frontmatter `tech: [...]` — 글 → 기술 연결. `category`, `tags`는 없앴다(분야는 첫 번째 기술에서 파생).
+- `next`(역방향), 기술별 글 목록, 분야 내 단계(같은 분야 선행만 센 깊이), 추천 경로는 `src/lib/tech.ts`가 빌드 때 계산한다. 없는 ID, 중복 ID, 순환 `requires`는 빌드를 실패시킨다.
+
+**화면**
+- `/` 소개 → 추천 학습 경로(글이 많이 쌓인 체인 자동 선택) → 최근 글 → 글 있는 분야의 진행도
+- `/tech/` 분야별·단계별 로드맵. "글 있는 기술만 보기" 기본 켬, 상태는 localStorage에 저장
+- `/tech/<id>/` 선행 ← 기술 → 다음, 학습 경로, 글, TIL. 글 없는 기술은 선행 기술의 글을 대신 추천하고 `noindex`
+- 글 페이지: 상단 학습 순서, 하단 "이어서 읽기"(다음 기술의 글 → 같은 기술의 글 → 다음 기술 칩). 날짜순 이전/다음 글은 없앴다
+- `/posts/` 분야 필터 칩(`?domain=`으로 공유·뒤로 가기 가능)
+
+**정리한 것**
+- `@xyflow/react`, `ArchitectureGraph`, `NodeDetailPanel`, `/architecture/*` 삭제
+- TIL 경로 존재 확인(빌드 시 GitHub API 호출) 삭제 — 빌드가 네트워크에 의존하지 않게 했다. 워크플로의 `GITHUB_TOKEN` 주입도 함께 뺐다
+- `getTechIndex()`는 프로덕션 빌드에서 한 번만 계산하고 캐시한다(dev에서는 매번 다시 계산)

@@ -1,8 +1,7 @@
 ---
 title: "iPhone Duo 출시 2주 전: UIScreen.main과 orientation 분기부터 걷어내는 대응 체크리스트"
 date: 2026-10-09
-category: iOS
-tags: [iOS, Swift, UIKit, SwiftUI, Xcode, App Store]
+tech: [ios]
 description: Apple이 2026-10-05 개발자 뉴스로 공지한 iPhone Duo 대응 가이드를 공식 문서 기준으로 정리한다. SDK 버전별 동작 차이, 깨지기 쉬운 코드 패턴, 테스트 방법, 2027년 4월 스크린샷 요건을 체크리스트로 묶고 실무 우선순위를 제안한다.
 draft: true
 ---

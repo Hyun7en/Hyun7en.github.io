@@ -1,0 +1,28 @@
+name: Frontend
+order: 6
+color: "#db2777"
+description: 웹 클라이언트 UI 개발.
+techs:
+  html-css:
+    name: HTML/CSS
+    description: 웹 문서의 구조와 스타일.
+  react:
+    name: React
+    description: 컴포넌트 기반 UI 라이브러리.
+    requires: [javascript, html-css]
+  nextjs:
+    name: Next.js
+    description: React 기반 풀스택 웹 프레임워크.
+    requires: [react]
+  vue:
+    name: Vue
+    description: 점진적으로 도입 가능한 UI 프레임워크.
+    requires: [javascript, html-css]
+  tailwind-css:
+    name: Tailwind CSS
+    description: 유틸리티 클래스 기반 CSS 프레임워크.
+    requires: [html-css]
+  jest:
+    name: Jest
+    description: JavaScript 테스트 프레임워크.
+    requires: [javascript]

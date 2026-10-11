@@ -1,0 +1,119 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getTechIndex } from '../../lib/tech';
+
+const index = await getTechIndex();
+
+const roadmap = index.domains.map((domain) => {
+  const techs = domain.techIds.map((id) => index.techs.get(id)!);
+  const stageCount = Math.max(...techs.map((t) => t.stage));
+  const stages = Array.from({ length: stageCount }, (_, i) =>
+    techs.filter((t) => t.stage === i + 1)
+  );
+  return {
+    domain,
+    stages,
+    covered: techs.filter((t) => t.posts.length > 0).length,
+    total: techs.length,
+  };
+});
+const idleDomains = roadmap.filter((r) => r.covered === 0).map((r) => r.domain);
+const hiddenCount = [...index.techs.values()].filter((t) => t.posts.length === 0).length;
+---
+
+<BaseLayout title="기술 로드맵" description="분야별 기술의 선행 관계와 각 기술을 다룬 글을 한눈에 보는 로드맵.">
+  <h1 class="page-title">기술 로드맵</h1>
+  <p class="page-lead">
+    오른쪽으로 갈수록 같은 분야의 선행 기술이 더 필요한 단계입니다. 카드를 누르면 그 기술의 글과 학습 경로를 볼 수 있습니다.
+  </p>
+
+  <div class="roadmap-toolbar">
+    <label class="toggle">
+      <input type="checkbox" id="covered-only" checked />
+      글 있는 기술만 보기
+    </label>
+    <span class="muted" id="hidden-note">글 없는 기술 {hiddenCount}개 숨김</span>
+  </div>
+
+  <div class="roadmap covered-only" id="roadmap">
+    {roadmap.map(({ domain, stages, covered, total }) => (
+      <section
+        id={domain.id}
+        class:list={['card', 'roadmap-domain', { 'no-covered': covered === 0 }]}
+        style={`--c: ${domain.color}`}
+      >
+        <h2>{domain.name} <small>{covered} / {total} 기술</small></h2>
+        {domain.description && <p class="muted">{domain.description}</p>}
+        <div class="roadmap-stages">
+          {stages.map((techs, i) => (
+            <div class:list={['roadmap-stage', { 'no-covered': techs.every((t) => t.posts.length === 0) }]}>
+              <div class="roadmap-stage-label">{i + 1}단계</div>
+              {techs.map((tech) => (
+                <a
+                  href={`/tech/${tech.id}/`}
+                  class:list={['roadmap-tech', { empty: tech.posts.length === 0 }]}
+                  style={`--c: ${domain.color}`}
+                >
+                  {tech.posts.length > 0 && <span class="count">{tech.posts.length}</span>}
+                  <b>{tech.name}</b>
+                  <small>
+                    {tech.requires.length > 0
+                      ? `← ${tech.requires.map((id) => index.techs.get(id)!.name).join(', ')}`
+                      : '시작점'}
+                  </small>
+                </a>
+              ))}
+            </div>
+          ))}
+        </div>
+      </section>
+    ))}
+    {idleDomains.length > 0 && (
+      <p class="roadmap-idle muted">
+        아직 글이 없는 분야:{" "}
+        {idleDomains.map((domain, i) => (
+          <>{i > 0 && ' · '}<a href={`#${domain.id}`}>{domain.name}</a></>
+        ))}
+      </p>
+    )}
+  </div>
+</BaseLayout>
+
+<script>
+  const KEY = 'roadmap:covered-only';
+  const roadmap = document.getElementById('roadmap');
+  const toggle = document.getElementById('covered-only') as HTMLInputElement | null;
+  const note = document.getElementById('hidden-note');
+
+  function apply(coveredOnly: boolean) {
+    roadmap?.classList.toggle('covered-only', coveredOnly);
+    if (note) note.hidden = !coveredOnly;
+  }
+
+  if (roadmap && toggle) {
+    let saved: string | null = null;
+    try {
+      saved = localStorage.getItem(KEY);
+    } catch {}
+    toggle.checked = saved !== 'false';
+    apply(toggle.checked);
+
+    toggle.addEventListener('change', () => {
+      apply(toggle.checked);
+      try {
+        localStorage.setItem(KEY, String(toggle.checked));
+      } catch {}
+    });
+
+    // Following a link to a domain or tech the filter hides would land on nothing.
+    // getElementById, not querySelector: an arbitrary hash isn't a valid selector.
+    let target: HTMLElement | null = null;
+    try {
+      target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+    } catch {}
+    if (target?.classList.contains('no-covered')) {
+      toggle.checked = false;
+      apply(false);
+    }
+  }
+</script>

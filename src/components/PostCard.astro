@@ -1,0 +1,33 @@
+---
+import type { PostSummary, TechIndex } from '../lib/tech';
+import { formatDate } from '../lib/format';
+import DomainBadge from './DomainBadge.astro';
+import TechChip from './TechChip.astro';
+
+interface Props {
+  post: PostSummary;
+  index: TechIndex;
+}
+
+const { post, index } = Astro.props;
+const domainById = new Map(index.domains.map((d) => [d.id, d]));
+const domain = post.domain ? domainById.get(post.domain) : undefined;
+const techs = post.tech.map((id) => index.techs.get(id)!);
+---
+
+<article class="post-card" data-domain={post.domain}>
+  <div class="post-card-meta">
+    {domain && <DomainBadge domain={domain} />}
+    <span>{formatDate(post.date)}</span>
+  </div>
+
+  <a href={`/posts/${post.id}/`} class="post-card-title">{post.title}</a>
+
+  {post.description && <p class="post-card-excerpt">{post.description}</p>}
+
+  {techs.length > 0 && (
+    <div class="post-card-tags">
+      {techs.map((tech) => <TechChip tech={tech} domain={domainById.get(tech.domain)!} />)}
+    </div>
+  )}
+</article>

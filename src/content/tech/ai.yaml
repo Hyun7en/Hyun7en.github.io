@@ -1,0 +1,36 @@
+name: AI
+order: 9
+color: "#7c3aed"
+description: 머신러닝·딥러닝과 LLM 기반 애플리케이션.
+techs:
+  llm:
+    name: LLM
+    description: 대규모 언어 모델의 동작 원리와 활용 방식.
+  prompt-engineering:
+    name: 프롬프트 엔지니어링
+    description: 원하는 출력을 얻기 위한 지시·예시·구조 설계.
+    requires: [llm]
+  claude-api:
+    name: Claude API
+    description: Anthropic Claude 모델을 애플리케이션에서 호출하는 API.
+    requires: [llm]
+  rag:
+    name: RAG
+    description: 검색한 문서를 근거로 답변을 생성하는 구조.
+    requires: [llm, vector-db]
+  ai-agents:
+    name: AI 에이전트·MCP
+    description: 도구를 호출하며 작업을 수행하는 에이전트와 Model Context Protocol.
+    requires: [claude-api]
+  machine-learning:
+    name: 머신러닝
+    description: 데이터로부터 패턴을 학습하는 모델과 평가 방법.
+    requires: [python]
+  deep-learning:
+    name: 딥러닝
+    description: 신경망 기반 학습. CNN, RNN, Transformer.
+    requires: [machine-learning]
+  pytorch:
+    name: PyTorch
+    description: 동적 그래프 기반 딥러닝 프레임워크.
+    requires: [deep-learning]

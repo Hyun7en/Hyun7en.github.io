@@ -9,10 +9,11 @@ interface Props {
   title?: string;
   description?: string;
   showSidebar?: boolean;
-  fullBleed?: boolean;
+  /** Keep thin pages (e.g. a tech with no posts yet) out of search results. */
+  noindex?: boolean;
 }
 
-const { title, description, showSidebar = false, fullBleed = false } = Astro.props;
+const { title, description, showSidebar = false, noindex = false } = Astro.props;
 const pageTitle = title ? `${title} | ${site.title}` : site.title;
 const pageDescription = description ?? site.description;
 ---
@@ -24,6 +25,7 @@ const pageDescription = description ?? site.description;
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{pageTitle}</title>
   <meta name="description" content={pageDescription} />
+  {noindex && <meta name="robots" content="noindex" />}
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -36,17 +38,13 @@ const pageDescription = description ?? site.description;
 <body>
   <Header />
 
-  {fullBleed ? (
-    <slot />
-  ) : (
-    <div class="layout">
-      <main class="main">
-        <slot />
-      </main>
-      {showSidebar && <Sidebar />}
-    </div>
-  )}
+  <div class="layout">
+    <main class="main">
+      <slot />
+    </main>
+    {showSidebar && <Sidebar />}
+  </div>
 
-  {!fullBleed && <Footer />}
+  <Footer />
 </body>
 </html>

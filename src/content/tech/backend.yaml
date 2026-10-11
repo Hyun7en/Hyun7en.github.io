@@ -1,0 +1,87 @@
+name: Backend
+order: 3
+color: "#2563eb"
+description: 서버, API, 인증, 서비스 구조 등 백엔드 개발 전반.
+techs:
+  rest-api:
+    name: REST API
+    description: HTTP 자원 중심으로 API를 설계하는 방식.
+    requires: [http]
+  graphql:
+    name: GraphQL
+    description: 클라이언트가 필요한 데이터 형태를 질의하는 API 방식.
+    requires: [rest-api]
+  grpc:
+    name: gRPC
+    description: Protocol Buffers와 HTTP/2 기반의 RPC 프레임워크.
+    requires: [http]
+  websocket:
+    name: WebSocket
+    description: 서버와 클라이언트 간 양방향 실시간 통신.
+    requires: [http]
+  auth:
+    name: 인증·인가 (JWT/OAuth)
+    description: 세션, JWT, OAuth 2.0 / OIDC 기반 인증과 권한 관리.
+    requires: [http]
+  spring:
+    name: Spring
+    description: IoC/DI, AOP를 중심으로 한 Java 애플리케이션 프레임워크.
+    requires: [java]
+  spring-boot:
+    name: Spring Boot
+    description: 자동 설정과 내장 서버로 Spring 애플리케이션을 빠르게 구성.
+    requires: [spring]
+    related: [jpa]
+  spring-security:
+    name: Spring Security
+    description: Spring 애플리케이션의 인증·인가 프레임워크.
+    requires: [spring-boot, auth]
+  jpa:
+    name: JPA
+    description: 자바 객체와 관계형 DB 테이블을 매핑하는 ORM 표준 스펙.
+    requires: [java, sql]
+    related: [transactions-indexes]
+    til:
+      - repository: MY_PJT
+        path: TIL/Spring/JPA
+  spring-data-jpa:
+    name: Spring Data JPA
+    description: Repository 인터페이스만으로 JPA 데이터 접근 계층을 구성.
+    requires: [spring-boot, jpa]
+  querydsl:
+    name: QueryDSL
+    description: 타입 안전한 동적 쿼리 작성 라이브러리.
+    requires: [jpa]
+  junit:
+    name: JUnit
+    description: Java 단위 테스트 프레임워크.
+    requires: [java]
+  nodejs:
+    name: Node.js
+    description: V8 기반 서버 사이드 JavaScript 런타임.
+    requires: [javascript]
+  express:
+    name: Express
+    description: Node.js의 미니멀 웹 프레임워크.
+    requires: [nodejs]
+  nestjs:
+    name: NestJS
+    description: TypeScript 기반의 구조화된 Node.js 서버 프레임워크.
+    requires: [typescript, nodejs]
+  django:
+    name: Django
+    description: 배터리 포함형 Python 웹 프레임워크.
+    requires: [python]
+  fastapi:
+    name: FastAPI
+    description: 타입 힌트 기반의 비동기 Python API 프레임워크.
+    requires: [python]
+  aspnet-core:
+    name: ASP.NET Core
+    description: .NET 기반 크로스플랫폼 웹 프레임워크.
+    requires: [csharp]
+  msa:
+    name: MSA
+    description: 서비스를 독립 배포 단위로 나누는 마이크로서비스 아키텍처.
+    requires: [rest-api, docker]
+    related: [kafka]

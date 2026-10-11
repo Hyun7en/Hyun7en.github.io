@@ -1,11 +1,82 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import ArchitectureGraph from '../components/ArchitectureGraph';
-import { getGraph } from '../lib/graph';
+import PostCard from '../components/PostCard.astro';
+import FlowPath from '../components/FlowPath.astro';
+import { getTechIndex, recommendedPaths } from '../lib/tech';
 
-const graph = await getGraph();
+const index = await getTechIndex();
+const recentPosts = index.posts.slice(0, 6);
+const paths = recommendedPaths(index);
+const allTechs = [...index.techs.values()];
+const coveredCount = allTechs.filter((t) => t.posts.length > 0).length;
+
+const domainProgress = index.domains.map((domain) => {
+  const techs = domain.techIds.map((id) => index.techs.get(id)!);
+  const covered = techs.filter((t) => t.posts.length > 0);
+  const latest = covered.sort((a, b) => b.posts[0].date.valueOf() - a.posts[0].date.valueOf())[0];
+  return { domain, covered: covered.length, total: techs.length, latest };
+});
+const activeDomains = domainProgress
+  .filter((d) => d.covered > 0)
+  .sort((a, b) => b.covered - a.covered || a.domain.order - b.domain.order);
+const idleDomains = domainProgress.filter((d) => d.covered === 0);
 ---
 
-<BaseLayout fullBleed>
-  <ArchitectureGraph client:load graph={graph} />
+<BaseLayout>
+  <section class="card home-hero">
+    <div>
+      <h1>기술의 흐름을 따라<br />공부한 것을 기록합니다</h1>
+      <p>무엇을 알아야 다음 기술로 넘어갈 수 있는지, 글과 코드로 연결합니다.</p>
+      <dl class="home-stats">
+        <div><dt>글</dt><dd>{index.posts.length}</dd></div>
+        <div><dt>다룬 기술</dt><dd>{coveredCount} / {allTechs.length}</dd></div>
+        <div><dt>분야</dt><dd>{index.domains.length}</dd></div>
+      </dl>
+    </div>
+    <div class="home-actions">
+      <a href="/tech/" class="btn btn-primary">로드맵 보기 →</a>
+      <a href="/posts/" class="btn">전체 글</a>
+    </div>
+  </section>
+
+  {paths.length > 0 && (
+    <section>
+      <h2 class="section-title">추천 학습 경로 <a href="/tech/">로드맵에서 보기 →</a></h2>
+      {paths.map((path) => <FlowPath path={path} index={index} />)}
+    </section>
+  )}
+
+  <section>
+    <h2 class="section-title">최근 글 <a href="/posts/">전체 보기 →</a></h2>
+    {recentPosts.length > 0 ? (
+      <div class="post-grid">
+        {recentPosts.map((post) => <PostCard post={post} index={index} />)}
+      </div>
+    ) : (
+      <p class="muted">아직 공개된 글이 없습니다.</p>
+    )}
+  </section>
+
+  <section>
+    <h2 class="section-title">분야별 진행도 <a href="/tech/">로드맵 전체 →</a></h2>
+    <div class="domain-progress">
+      {activeDomains.map(({ domain, covered, total, latest }) => (
+        <a href={`/tech/#${domain.id}`} class="card domain-progress-item" style={`--c: ${domain.color}`}>
+          <span class="domain-progress-name">{domain.name}</span>
+          <span class="progress-bar"><i style={`width: ${(covered / total) * 100}%`}></i></span>
+          <span class="muted">
+            {covered} / {total} 기술{latest && ` · 최근 ${latest.name}`}
+          </span>
+        </a>
+      ))}
+    </div>
+    {idleDomains.length > 0 && (
+      <p class="muted domain-idle">
+        아직 글이 없는 분야:{" "}
+        {idleDomains.map(({ domain }, i) => (
+          <>{i > 0 && ' · '}<a href={`/tech/#${domain.id}`}>{domain.name}</a></>
+        ))}
+      </p>
+    )}
+  </section>
 </BaseLayout>

@@ -1,0 +1,32 @@
+name: Database
+order: 4
+color: "#d97706"
+description: 관계형·비관계형 데이터베이스와 데이터 모델링.
+techs:
+  sql:
+    name: SQL
+    description: 관계형 데이터베이스를 다루는 질의 언어.
+  mysql:
+    name: MySQL
+    description: 가장 널리 쓰이는 오픈소스 관계형 DB.
+    requires: [sql]
+  postgresql:
+    name: PostgreSQL
+    description: 표준 준수와 확장성이 강한 오픈소스 관계형 DB.
+    requires: [sql]
+  transactions-indexes:
+    name: 트랜잭션·인덱스
+    description: ACID, 격리 수준, 락, 인덱스 구조와 실행 계획.
+    requires: [sql]
+  mongodb:
+    name: MongoDB
+    description: JSON 문서 기반 NoSQL 데이터베이스.
+  redis:
+    name: Redis
+    description: 인메모리 키-값 저장소. 캐시, 세션, 분산 락.
+  elasticsearch:
+    name: Elasticsearch
+    description: 역색인 기반 검색·분석 엔진.
+  vector-db:
+    name: 벡터 DB
+    description: 임베딩 벡터의 유사도 검색에 특화된 데이터베이스.

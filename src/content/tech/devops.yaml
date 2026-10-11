@@ -1,0 +1,33 @@
+name: DevOps·Cloud
+order: 8
+color: "#0f766e"
+description: 컨테이너, 배포 자동화, 클라우드 인프라와 운영.
+techs:
+  docker:
+    name: Docker
+    description: 애플리케이션을 컨테이너 이미지로 패키징하고 실행.
+    requires: [linux]
+  kubernetes:
+    name: Kubernetes
+    description: 컨테이너 오케스트레이션 플랫폼.
+    requires: [docker]
+  ci-cd:
+    name: CI/CD (GitHub Actions)
+    description: 빌드·테스트·배포 파이프라인 자동화.
+    requires: [git]
+  nginx:
+    name: Nginx
+    description: 웹 서버이자 리버스 프록시·로드 밸런서.
+    requires: [linux, http]
+  aws:
+    name: AWS
+    description: 대표적인 퍼블릭 클라우드. EC2, S3, RDS, IAM 등.
+    requires: [linux, networking]
+  terraform:
+    name: Terraform
+    description: 코드로 인프라를 선언하고 관리하는 IaC 도구.
+    requires: [aws]
+  monitoring:
+    name: 모니터링 (Prometheus/Grafana)
+    description: 메트릭 수집, 대시보드, 알림.
+    requires: [docker]

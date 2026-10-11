@@ -1,35 +1,68 @@
 ---
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { formatDateLong } from '../../lib/format';
+import DomainBadge from '../../components/DomainBadge.astro';
+import TechChip from '../../components/TechChip.astro';
+import { formatDate, formatDateLong } from '../../lib/format';
+import { getTechIndex, learningPath, type PostSummary, type Tech } from '../../lib/tech';
 
 export async function getStaticPaths() {
-  const posts = (await getCollection('posts', ({ data }) => !data.draft))
-    .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
-
-  return posts.map((post, index) => ({
-    params: { slug: post.id },
-    props: {
-      post,
-      prevPost: posts[index + 1] ?? null, // older
-      nextPost: posts[index - 1] ?? null, // newer
-    },
-  }));
+  const posts = await getCollection('posts', ({ data }) => !data.draft);
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
 }
 
-const { post, prevPost, nextPost } = Astro.props;
+const { post } = Astro.props;
 const { Content } = await render(post);
 
 const words = post.body?.split(/\s+/).length ?? 0;
 const readTime = Math.floor(words / 200) + 1;
+
+const index = await getTechIndex();
+const domainById = new Map(index.domains.map((d) => [d.id, d]));
+const techs = post.data.tech.map((id) => index.techs.get(id)!);
+const primary = techs[0];
+const domain = primary ? domainById.get(primary.domain) : undefined;
+// Learning order up to the post's main tech, so readers see where this post sits.
+const trail = primary ? learningPath(index, primary.id) : [];
+
+// "Read next" follows the tech flow instead of publish date.
+const seen = new Set([post.id]);
+const flowNext: { from: Tech; to: Tech; post: PostSummary }[] = [];
+for (const tech of techs) {
+  for (const nextId of tech.next) {
+    const to = index.techs.get(nextId)!;
+    for (const p of to.posts) {
+      if (seen.has(p.id)) continue;
+      seen.add(p.id);
+      flowNext.push({ from: tech, to, post: p });
+    }
+  }
+}
+const sameTech = techs
+  .flatMap((t) => t.posts)
+  .filter((p) => !seen.has(p.id) && seen.add(p.id))
+  .slice(0, 4);
+const nextTechs = [...new Set(techs.flatMap((t) => t.next))]
+  .map((id) => index.techs.get(id)!)
+  .filter((t) => !post.data.tech.includes(t.id));
 ---
 
 <BaseLayout title={post.data.title} description={post.data.description} showSidebar>
   <article class="post-article">
     <header class="post-header">
-      {post.data.category && (
-        <a href="/posts/" class="category-label">{post.data.category}</a>
+      {trail.length > 1 && (
+        <nav class="post-trail" aria-label="학습 순서">
+          <span class="muted">학습 순서</span>
+          {trail.map((step, i) => (
+            <>
+              {i > 0 && <span class="post-trail-sep">›</span>}
+              <a href={`/tech/${step.id}/`} class:list={{ current: step.id === primary.id }}>{step.name}</a>
+            </>
+          ))}
+        </nav>
       )}
+
+      {domain && <DomainBadge domain={domain} />}
 
       <h1 class="post-title">{post.data.title}</h1>
 
@@ -38,11 +71,9 @@ const readTime = Math.floor(words / 200) + 1;
         <span class="post-meta-item">⏱ 약 {readTime}분</span>
       </div>
 
-      {post.data.tags.length > 0 && (
+      {techs.length > 0 && (
         <div class="post-tags">
-          {post.data.tags.map((tag) => (
-            <span class="tag"># {tag}</span>
-          ))}
+          {techs.map((tech) => <TechChip tech={tech} domain={domainById.get(tech.domain)!} />)}
         </div>
       )}
     </header>
@@ -51,6 +82,49 @@ const readTime = Math.floor(words / 200) + 1;
       <Content />
     </div>
   </article>
+
+  {techs.length > 0 && (
+    <section class="card read-next">
+      <h2 class="section-title">이어서 읽기</h2>
+
+      {flowNext.length > 0 && (
+        <ul class="link-list">
+          {flowNext.map(({ from, to, post: p }) => (
+            <li>
+              <span class="read-next-flow">{from.name} → {to.name}</span>
+              <a href={`/posts/${p.id}/`}>{p.title}</a>
+              <small>{formatDate(p.date)}</small>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      {sameTech.length > 0 && (
+        <>
+          <h3 class="read-next-sub">같은 기술을 다룬 글</h3>
+          <ul class="link-list">
+            {sameTech.map((p) => (
+              <li>
+                <a href={`/posts/${p.id}/`}>{p.title}</a>
+                <small>{formatDate(p.date)}</small>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+
+      {nextTechs.length > 0 && (
+        <>
+          <h3 class="read-next-sub">다음으로 이어지는 기술</h3>
+          <div>{nextTechs.map((t) => <TechChip tech={t} domain={domainById.get(t.domain)!} />)}</div>
+        </>
+      )}
+
+      {flowNext.length === 0 && sameTech.length === 0 && nextTechs.length === 0 && (
+        <p class="muted"><a href="/tech/">로드맵</a>에서 다른 기술의 흐름을 둘러보세요.</p>
+      )}
+    </section>
+  )}
 
   <div class="comments" style="margin-top: 36px;">
     <script
@@ -63,22 +137,4 @@ const readTime = Math.floor(words / 200) + 1;
       async
     ></script>
   </div>
-
-  {(prevPost || nextPost) && (
-    <nav class="post-nav">
-      {prevPost ? (
-        <a href={`/posts/${prevPost.id}/`} class="post-nav-item prev">
-          <span class="post-nav-label">← 이전 글</span>
-          <span class="post-nav-title">{prevPost.data.title}</span>
-        </a>
-      ) : <div />}
-
-      {nextPost ? (
-        <a href={`/posts/${nextPost.id}/`} class="post-nav-item next">
-          <span class="post-nav-label">다음 글 →</span>
-          <span class="post-nav-title">{nextPost.data.title}</span>
-        </a>
-      ) : <div />}
-    </nav>
-  )}
 </BaseLayout>

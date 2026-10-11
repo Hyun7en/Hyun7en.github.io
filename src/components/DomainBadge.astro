@@ -1,0 +1,11 @@
+---
+import type { Domain } from '../lib/tech';
+
+interface Props {
+  domain: Domain;
+}
+
+const { domain } = Astro.props;
+---
+
+<a href={`/tech/#${domain.id}`} class="domain-badge" style={`--c: ${domain.color}`}>{domain.name}</a>
