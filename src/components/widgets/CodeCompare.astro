@@ -1,10 +1,11 @@
 ---
 import { Code } from 'astro:components';
+import type { ComponentProps } from 'astro/types';
 
 interface Props {
   before: string;
   after: string;
-  lang: string;
+  lang: ComponentProps<typeof Code>['lang'];
   beforeLabel?: string;
   afterLabel?: string;
 }
@@ -42,7 +43,7 @@ const tabs = [beforeLabel, afterLabel, '변경점'];
 <figure class="code-compare" data-code-compare>
   <div class="code-compare-tabs" role="tablist">
     {tabs.map((label, i) => (
-      <button type="button" role="tab" aria-selected={String(i === 0)} data-tab={i}>{label}</button>
+      <button type="button" role="tab" aria-selected={i === 0 ? 'true' : 'false'} data-tab={i}>{label}</button>
     ))}
   </div>
   <div role="tabpanel" data-panel="0"><Code code={before} lang={lang} theme="dracula" /></div>
